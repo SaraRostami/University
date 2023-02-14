@@ -1,0 +1,32 @@
+{
+  "alias": "video/2452/pydata-recap-lightning-talk",
+  "category": "ChiPy",
+  "copyright_text": "CC BY",
+  "description": "",
+  "duration": 9,
+  "id": 2452,
+  "language": "eng",
+  "quality_notes": "",
+  "recorded": "2013-11-14",
+  "slug": "pydata-recap-lightning-talk",
+  "speakers": [
+    "Jason Wirth"
+  ],
+  "summary": "Recap of last weeks PyData conference in NYC.\n",
+  "tags": [
+    "lightning talks"
+  ],
+  "thumbnail_url": "https://archive.org/services/img/pyvideo_2452___PyData_Recap_Lightning_Talk",
+  "title": "PyData Recap Lightning Talk",
+  "videos": [
+    {
+      "type": "archive.org",
+      "url": "https://archive.org/details/pyvideo_2452___PyData_Recap_Lightning_Talk"
+    },
+    {
+      "length": 0,
+      "type": "youtube",
+      "url": "https://www.youtube.com/watch?v=I7B2BtgjfgY"
+    }
+  ]
+}

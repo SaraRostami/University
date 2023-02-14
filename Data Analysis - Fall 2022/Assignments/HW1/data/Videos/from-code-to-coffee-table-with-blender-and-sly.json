@@ -1,0 +1,30 @@
+{
+  "alias": "video/3379/from-code-to-coffee-table-with-blender-and-sly",
+  "category": "ChiPy",
+  "copyright_text": "CC BY",
+  "description": "I've been developing a Python library for turning 3D models into\nCNC-machinable parts. I will demonstrate the basics of the library and\nhow I used it to build a wood coffee table.\n",
+  "duration": 2400,
+  "id": 3379,
+  "language": "eng",
+  "quality_notes": "",
+  "recorded": "2015-03-12",
+  "slug": "from-code-to-coffee-table-with-blender-and-sly",
+  "speakers": [
+    "Matt Meshulam"
+  ],
+  "summary": "",
+  "tags": [],
+  "thumbnail_url": "https://archive.org/services/img/pyvideo_3379___From_Code_to_Coffee_Table_with_Blender",
+  "title": "From Code to Coffee Table with Blender and Sly",
+  "videos": [
+    {
+      "type": "archive.org",
+      "url": "https://archive.org/details/pyvideo_3379___From_Code_to_Coffee_Table_with_Blender"
+    },
+    {
+      "length": 0,
+      "type": "youtube",
+      "url": "http://youtu.be/ib2n2msvVZk"
+    }
+  ]
+}

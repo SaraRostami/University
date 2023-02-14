@@ -1,0 +1,30 @@
+{
+  "alias": "video/2449/measure-it",
+  "category": "ChiPy",
+  "copyright_text": "CC BY",
+  "description": "",
+  "duration": 40,
+  "id": 2449,
+  "language": "eng",
+  "quality_notes": "",
+  "recorded": "2013-11-14",
+  "slug": "measure-it",
+  "speakers": [
+    "Peter Fein"
+  ],
+  "summary": "measure\\_it provides timing and counting for iterators (and other code\nsegments).\n",
+  "tags": [],
+  "thumbnail_url": "https://archive.org/services/img/pyvideo_2449___Measure_It",
+  "title": "Measure It",
+  "videos": [
+    {
+      "type": "archive.org",
+      "url": "https://archive.org/details/pyvideo_2449___Measure_It"
+    },
+    {
+      "length": 0,
+      "type": "youtube",
+      "url": "https://www.youtube.com/watch?v=A_C4Z4RDDgI"
+    }
+  ]
+}
