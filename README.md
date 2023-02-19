@@ -3,7 +3,7 @@ This repository contains the homework and projects that I've done for the univer
 most of these courses have two main parts: Assignments and Project(s).
 In the Assignments folder of each course, there is a separate folder for each assignment and inside these folders, there following files exist: Problem_set file, dataset file(s), solution code file(s), and solutions' report file.
 
-## Machine Learning - Fall 202
+## Machine Learning - Fall 2022
 Machine Learning course presentd by [Dr. Mohammadreza Abolghasemi Dehaqani](https://ece.ut.ac.ir/en/~dehaqani) and  [Dr. Babak Nadjar Araabi](https://ece.ut.ac.ir/en/~araabi) at the university of Tehran in the Fall of 2021.
 
 ## Statistical Inference - Fall 2021
