@@ -19,7 +19,7 @@ Data Analysis course presentd by [Dr. Mohammad Amin Sadeghi](https://ece.ut.ac.i
 Neural Networks & Deep Learning course presentd by [Dr. Ahmad Kalhor](https://ece.ut.ac.ir/en/~akalhor) at the university of Tehran in the Fall of 2022.
 
 ## Trustworthy AI - Spring 2023
-Data Analysis course presentd by [Dr. Mohammad Amin Sadeghi](https://ece.ut.ac.ir/en/~asadeghi) and [Dr. Mostafa Tavassolipour](https://profile.ut.ac.ir/en/~96755111/grants) at the university of Tehran in the Spring of 2023.
+Trustworthy AI course presentd by [Dr. Mohammad Amin Sadeghi](https://ece.ut.ac.ir/en/~asadeghi) and [Dr. Mostafa Tavassolipour](https://profile.ut.ac.ir/en/~96755111/grants) at the university of Tehran in the Spring of 2023.
 
 ## Bio-Inspired Computing - Spring 2023
-Data Analysis course presentd by [Dr. Masoud Asadpour](https://ece.ut.ac.ir/en/~asadpour) at the university of Tehran in the Spring of 2023.
+Bio-Inspired Computing course presentd by [Dr. Masoud Asadpour](https://ece.ut.ac.ir/en/~asadpour) at the university of Tehran in the Spring of 2023.
