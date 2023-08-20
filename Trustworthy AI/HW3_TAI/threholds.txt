@@ -1,0 +1,2 @@
+threh found for frog: 0.606
+threh found for cat: 0.65
