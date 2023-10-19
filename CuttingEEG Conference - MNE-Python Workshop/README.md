@@ -8,10 +8,10 @@
 </p> -->
 
 <p float="left">
-  <img src="./CuttingGardens-2023-logo-final-Small.png" width="20%" />
-  <img src="./nbic.jpg" width="20%" /> 
-  <img src="./partners-logo-1.png" width="25%" /> 
-  <img src="./partners-logo-2.png" width="20%" /> 
+  <img src="./imgs/CuttingGardens-2023-logo-final-Small.png" width="20%" />
+  <img src="./imgs/nbic.jpg" width="20%" /> 
+  <img src="./imgs/partners-logo-1.png" width="25%" /> 
+  <img src="./imgs/partners-logo-2.png" width="20%" /> 
 </p>
 
 ## MNE-Python Workshop
