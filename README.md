@@ -23,3 +23,8 @@ Trustworthy AI course presentd by [Dr. Mohammad Amin Sadeghi](https://ece.ut.ac.
 
 ## Bio-Inspired Computing - Spring 2023
 Bio-Inspired Computing course presentd by [Dr. Masoud Asadpour](https://ece.ut.ac.ir/en/~asadpour) at the university of Tehran in the Spring of 2023.
+
+## CuttingGardens Conference - Fall 2023
+[CuttingGardens](https://cuttinggardens2023.org/) is a distributed conference on cutting-edge methods for M/EEG data analysis. It happens simultaneously in several locations (aka. Gardens) across the world, with a common global program, broadcasted to all locations, and local programs made of talks, tutorials, posters, social events, satellites,... as each Garden (optionally) sees fit. CuttingGardens is part of the [CuttingEEG](https://cuttingeeg.org/) conference series. 
+My lab mate and I were in charge of the MNE Python toolbox presentation.
+This is the [link](https://cuttinggardens2023.org/gardens/tehran/) to our presentation schedule in Tehran Garden.
