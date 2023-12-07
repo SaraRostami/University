@@ -21,10 +21,10 @@ Data Analysis course presentd by [Dr. Mohammad Amin Sadeghi](https://ece.ut.ac.i
 Neural Networks & Deep Learning course presentd by [Dr. Ahmad Kalhor](https://ece.ut.ac.ir/en/~akalhor) at the university of Tehran in the Fall of 2022.
 
 ## Introduction to Cognitive Neuroscience - Spring 2023 (part of the TA team)
-This course was presentd by [Dr. Mohammadreza Abolghasemi Dehaqani](https://ece.ut.ac.ir/en/~dehaqani) at the university of Tehran in the spring of 2023. I was part of the Teaching Assistants team for this course, where I collaborated in desiging and grading the EEG homework.
+This course was presentd by [Dr. Mohammadreza Abolghasemi Dehaqani](https://ece.ut.ac.ir/en/~dehaqani) at the university of Tehran in the spring of 2023. I was part of the Teaching Assistants team for this course, where I collaborated in desiging and grading the EEG homework, and the [Final Project](https://github.com/SaraRostami/University/blob/ba01624db9d02942c82f14011ee79891c43a255c/Files/Cognitive%20Neuroscience_Final%20Project.pdf).
 
 ## Statistical Inference - Spring 2023 (part of the TA team)
-This course was presentd by [Dr. Behnam Bahrak](https://ece.ut.ac.ir/en/~bahrak) at the university of Tehran in the spring of 2023. I was part of the Teaching Assistants team for this course, where I collaborated in desiging and grading the first homework. This homework included topics in Sampling strategies, Conditional Probability, Experimental vs. Observational studies, Confounders, Misinformation Analysis, and a programming question using the R language.
+This course was presentd by [Dr. Abdol-hossein Vahabie](https://profile.ut.ac.ir/en/~h.vahabie) at the university of Tehran in the spring of 2023. I was part of the Teaching Assistants team for this course, where I collaborated in desiging and grading the first homework. [This homework](https://github.com/SaraRostami/University/blob/ba01624db9d02942c82f14011ee79891c43a255c/Files/Statistical%20Inference_HW1.pdf) included topics in Sampling strategies, Conditional Probability, Experimental vs. Observational studies, Confounders, Misinformation Analysis, and a programming question using the R language.
 
 ## Trustworthy AI - Spring 2023
 Trustworthy AI course presentd by [Dr. Mohammad Amin Sadeghi](https://ece.ut.ac.ir/en/~asadeghi) and [Dr. Mostafa Tavassolipour](https://profile.ut.ac.ir/en/~96755111/grants) at the university of Tehran in the Spring of 2023.
