@@ -1,7 +1,9 @@
 # University
-This repository contains the homework and projects that I've done for the university courses.
-most of these courses have two main parts: Assignments and Project(s).
-In the Assignments folder of each course, there is a separate folder for each assignment and inside these folders, the following files exist: Problem_set file, dataset file(s), solution code file(s), and solutions' report file.
+This repository contains my activities as a Master's student, Teaching Assistant and Research Assistant at the university.
+- Most of these courses I took have two main parts: Assignments and Project(s). In the Assignments folder of each course, there is a separate folder for each assignment and inside these folders, the following files exist: Problem_set file, dataset file(s), solution code file(s), and solutions' report file.
+- My presentations are included in this repository.
+- My contributions as a TA are also included.
+
 
 ## Machine Learning - Fall 2021
 Machine Learning course presentd by [Dr. Mohammadreza Abolghasemi Dehaqani](https://ece.ut.ac.ir/en/~dehaqani) and  [Dr. Babak Nadjar Araabi](https://ece.ut.ac.ir/en/~araabi) at the university of Tehran in the Fall of 2021.
