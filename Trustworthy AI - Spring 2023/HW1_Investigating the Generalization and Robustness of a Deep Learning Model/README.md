@@ -23,7 +23,7 @@ We employed the [CIFAR10 dataset](https://github.com/EN10/CIFAR), and for model 
 3. Compared the results with the previous parts.  
 
 
-## What we did - Forth part
+## What we did - Fourth part
 1. Trained the model like previous parts, only for its loss funcction, use the Angular Loss instead of CrossEntropy.
 2. Repeated the First and Second part, with the above difference, and Reported the results.
 3. Compared the results with the previous parts. 
