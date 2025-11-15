@@ -1,7 +1,7 @@
 # CNN Resolution Impact & Architecture Exploration
 
-![Project Banner](CNN_arch.png)
-![Project Banner](CNN_TO_TVTV.png)
+![Project Banner1](CNN_arch.PNG)
+![Project Banner2](CNN_TO_TVTV.PNG)
 
 ## Overview
 This project investigates CNN performance under varying input resolutions on CIFAR-10 as part of Neural Networks & Deep Learning Homework 2 at University of Tehran. Q1 analyzes TOTV/TVTV training strategies (train-on-top-variations vs. train-vary-test-vary), resizing impacts, and data splitting. Q2 builds/explains CNN architectures, compares optimizers/dropout, per assignment guidelines.
