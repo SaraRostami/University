@@ -77,7 +77,7 @@ Key metrics across models:
 | RBM         | Movie Recommender    | 20                  | Error <0.05       | Good hidden representations|
 | MLP         | House Prices         | 50                  | MAE 0.0172 (scaled)| Strong on correlated feats. |
 
-- Visuals: All figures from report (e.g., Fig 1-27) in `figures/`; no overfitting observed.
+<!-- - Visuals: All figures from report (e.g., Fig 1-27) in `figures/`; no overfitting observed. -->
 
 ## Challenges & Learnings
 - **Challenges**: Non-linear separability in single Adaline (fixed via Madaline layers); NaN handling in houses data; CD-1 approximation in RBM.
@@ -89,12 +89,6 @@ Key metrics across models:
 - Apply MLP to classification with cross-entropy.
 - Integrate with later projects (e.g., GAN initialization).
 
-## References
-- Rosenblatt, F. (1962). *Principles of Neurodynamics*. Spartan Books. (Adaline)
-- Widrow, B., & Hoff, M. (1960). *Adaptive Switching Circuits*. IRE WESCON. (LMS)
-- Hinton, G. E. (2002). *Training Products of Experts by Minimizing Contrastive Divergence*. Neural Computation. (RBM)
-- Rumelhart, D. E., et al. (1986). *Learning Representations by Back-propagating Errors*. Nature. (MLP)
-- [HW1 Assignment](path/to/NNDL-HW1.pdf) – University of Tehran, NNDL Course.
 
 ## License
 MIT License—feel free to use/fork!
@@ -102,4 +96,4 @@ MIT License—feel free to use/fork!
 ---
 
 *Report in Persian*: [HW1_Rostami_810100355_Shahcheraghi_810199196.pdf](HW1_Rostami_810100355_Shahcheraghi_810199196.pdf)  
-*Questions?* Open an issue or contact [your-email@example.com].
+
