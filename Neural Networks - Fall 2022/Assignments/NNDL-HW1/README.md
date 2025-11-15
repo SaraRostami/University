@@ -22,7 +22,7 @@ Focus: Theoretical foundations, training dynamics, and analysis per [HW1 Assignm
 - [Restricted Boltzmann Machine](#restricted-boltzmann-machine)
 - [Multi-Layer Perceptron](#multi-layer-perceptron)
 - [Results & Evaluation](#results--evaluation)
-- [How to Run](#how-to-run)
+<!-- - [How to Run](#how-to-run) -->
 - [Challenges & Learnings](#challenges--learnings)
 - [Future Work](#future-work)
 - [References](#references)
