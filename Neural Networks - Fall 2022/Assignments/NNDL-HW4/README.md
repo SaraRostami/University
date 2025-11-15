@@ -8,7 +8,7 @@ This project implements recurrent models for time-series forecasting and text cl
 **Key Goal**: Model temporal dependencies in pollution trends and semantic patterns in news; evaluate via R²/RMSE for regression, accuracy/F1 for classification.
 
 - **Team Members**: Sara Rostami, Amin Shahcheraghi
-- **Duration**: Jan 2023 (Due: 1401/10/01)
+- **Date**: Jan 2023 (Due: 1401/10/01)
 - **Technologies**: Python 3.x, TensorFlow/Keras (LSTM/CNN-RNN), Pandas/NumPy (preprocessing), Matplotlib (visuals), Gensim (Word2Vec)
 - **Datasets**: Beijing Air Quality (~43K hourly samples, 12 stations, 13 features like PM2.5/DEWP/TEMP); LIAR (~12K news statements, labels 0-4 for truthfulness)
 - **Key Results**: LSTM lag-1: R² 0.85, RMSE 0.12; Hybrid CNN-LSTM: 92% acc., 91% F1 (vs. RNN 85%); hybrid reduces overfitting via CNN local features.
