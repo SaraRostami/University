@@ -116,7 +116,6 @@ Metrics on CIFAR-10 test (100 epochs, batch=128; from report Tables 2-3):
 - [Kadam, S. S., & Adamuthe, A. C. (2020). *CNN Model for Image Classification on MNIST and Fashion-MNIST Dataset*. Journal of Scientific Research, 64(02), 374-384.](https://www.researchgate.net/publication/343173734_CNN_Model_for_Image_Classification_on_MNIST_and_Fashion-MNIST_Dataset) (CNN architecture baseline for Q2).
 - [Saha, S., et al. (2018). *Effects of Varying Resolution on Performance of CNN based Image Classification: An Experimental Study*. International Journal of Computer Sciences and Engineering, 6(9), 1-6.](https://www.researchgate.net/publication/328960034_Effects_of_Varying_Resolution_on_Performance_of_CNN_based_Image_Classification_An_Experimental_Study) (TOTV/TVTV methods for Q1).
 - [Krizhevsky, A. (2009). *Learning Multiple Layers of Features from Tiny Images* (CIFAR-10 tech report).](https://www.cs.toronto.edu/~kriz/learning-features-2009-TR.pdf)
-- [HW2 Assignment](path/to/NNDL-HW2.pdf) – University of Tehran, NNDL Course.
 
 ## License
 MIT License—feel free to use/fork!
