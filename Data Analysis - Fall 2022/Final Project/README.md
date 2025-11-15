@@ -143,14 +143,14 @@ Voted top models (SVM w/28 feats + KNN/CNN/BiLSTM w/RF feats) via soft voting.
 - **Why Better?**: Combines strengths—CNN for patterns, SVM for margins, KNN/BiLSTM for locality/memory.
 - **Trading Implications**: Low false positives on ups (high precision) reduce buy risks; TNR catches most downs.
 
-## How to Run
-1. Clone repo: `git clone https://github.com/yourusername/crypto-prediction.git`
+<!-- ## How to Run
+1. Clone repo: `git clone https://github.com/SaraRostami/University.git`
 2. Install deps: `pip install -r requirements.txt`
 3. Crawl data: `python src/crawl_data.py` (outputs raw CSV).
 4. Preprocess: `python src/preprocess.py` (adds labels/indicators).
 5. EDA: Run `notebooks/03_eda.ipynb`.
 6. Train/Eval: `python src/models.py` or `notebooks/05_modeling.ipynb`.
-7. Note: Selenium requires ChromeDriver; update paths in scripts.
+7. Note: Selenium requires ChromeDriver; update paths in scripts. -->
 
 ## Challenges & Learnings
 - **Challenges**: Dynamic site loading (handled via thresholds); high feature correlation/overfitting in DL models; imbalanced early data NaNs.
