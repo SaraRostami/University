@@ -1,6 +1,6 @@
 # Attention Mechanisms & Transformers: BERT Encoder and BEiT for NLP/Vision Tasks
 
-![Project Banner](path/to/banner-image.jpg) <!-- Add a relevant image, e.g., attention heatmap or BEiT segmentation -->
+<!-- ![Project Banner](path/to/banner-image.jpg) Add a relevant image, e.g., attention heatmap or BEiT segmentation -->
 
 ## Overview
 This project delves into attention and transformer architectures as part of Neural Networks & Deep Learning Homework 5 at University of Tehran. Q1: Implement/explain BERT encoder (attention, multi-head, embeddings). Q2: Vision transformers via BEiT (pretraining, segmentation, classification baseline). Focus on self-attention math, positional/segment embeddings, and ViT/BEiT adaptations for images.
