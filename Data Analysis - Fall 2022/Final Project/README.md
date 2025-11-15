@@ -50,27 +50,6 @@ crypto-prediction\
 ├── requirements.txt\
 └── README.md
 
-## Project Structure
-crypto-prediction/
-├── data/
-│   ├── raw_btc_eth_usdt.csv  # Crawled raw data
-│   └── processed_features.csv # Post-preprocessing dataset
-├── notebooks/
-│   ├── 01_crawling.ipynb     # Selenium scraping
-│   ├── 02_preprocessing.ipynb # Cleaning & indicators
-│   ├── 03_eda.ipynb          # Visualizations & patterns
-│   ├── 04_feature_selection.ipynb # Correlation & RF
-│   └── 05_modeling.ipynb     # Training & comparison
-├── src/
-│   ├── crawl_data.py         # Scraping script
-│   ├── preprocess.py         # Feature engineering
-│   ├── eda.py               # Analysis functions
-│   ├── models.py            # ML/DL implementations
-│   └── evaluate.py          # Metrics & confusion matrices
-├── figures/                  # Output plots (e.g., candlesticks, comparisons)
-│   └── ...
-├── requirements.txt
-└── README.md
 
 
 ## Data Collection
