@@ -7,8 +7,8 @@ This project delves into attention and transformer architectures as part of Neur
 
 **Key Goal**: Build transformer components from scratch; apply to NLP (sentence analysis) and vision (segmentation/classification); evaluate via weights/visuals and metrics (acc./loss).
 
-- **Team Members**: Sara Rastegar (810100355), Amin Shahcheraghi (810199196)
-- **Duration**: Jan 2023 (Due: 1401/10/13)
+- **Team Members**: Sara Rostami, Amin Shahcheraghi 
+- **Date**: Jan 2023 (Due: 1401/10/13)
 - **Technologies**: Python 3.x, PyTorch (transformer layers), Matplotlib (visuals/heatmaps)
 - **Datasets**: Custom sentence for BERT; ADE20K-like for BEiT segmentation; CIFAR-10 for MLP baseline (~60K images, 10 classes)
 - **Key Results**: BERT: Attention weights highlight relations (e.g., movie-cinema 0.25 max); BEiT segmentation: Fine-tuned IoU ~0.65 (vs. pre-trained 0.55, Fig 4); MLP CIFAR-10: 55% test acc., loss plateau ~0.7 after 50 epochs (Figs 6-9).
