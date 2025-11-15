@@ -52,76 +52,70 @@ gan-image-synthesis\
 
 
 ## DCGAN Implementation
-Deep Convolutional GAN for unconditional image synthesis.
+Deep Convolutional GAN for unconditional image synthesis, as per [Radford et al. (2015)](https://arxiv.org/abs/1511.06434).
 
 - **Architecture**:
-  - **Generator**: Transposed Conv2D layers (e.g., 100→7x7x512→64x64 images) with BatchNorm/LeakyReLU; starts from latent noise z.
-  - **Discriminator**: Conv2D layers (64x64→1) with Dropout/LeakyReLU; binary classification (real/fake).
-  - Loss: Binary Cross-Entropy; Optimizer: Adam (lr=0.0002, β1=0.5).
+  - **Generator**: Transposed Conv2D (noise z → 64x64 images) with BatchNorm/LeakyReLU.
+  - **Discriminator**: Conv2D (images → binary logit) with Dropout/LeakyReLU.
+  - Loss: Binary Cross-Entropy; Adam optimizer (lr=0.0002, β1=0.5).
 
-- **Training**: Alternate G/D updates; 50 epochs, batch=64.
-- **Evaluation**: FID/IS scores implicit via visuals; loss drops to ~0.5, accuracy >90% by epoch 46.
-- **Samples**: Early (epoch 1: noisy) → Late (epoch 46: realistic digits/faces). See Fig 1-10.
+- **Training**: Alternate G/D updates; 50 epochs, batch=64 on 5-class digits.
+- **Evaluation**: Visual samples evolve from noisy (epoch 1) to realistic (epoch 46); loss ~0.5, acc. >90%. See Fig 1-10.
 
 ## AC-GAN: Auxiliary Classifier GAN
-Extends DCGAN with class conditioning for labeled generation.
+Extends DCGAN with class conditioning for labeled generation [(ACGAN)](https://arxiv.org/abs/1610.09585).
 
 - **Architecture**:
-  - **Generator**: Embeds class labels (e.g., one-hot) into noise; outputs conditioned images.
-  - **Discriminator**: Dual heads—real/fake logit + 10-class softmax; fused for joint supervision.
-  - Loss: BCE (real/fake) + Cross-Entropy (class); weights balanced.
-
-- **Training**: Similar to DCGAN; monitors discriminator/generator losses separately.
-- **Evaluation**: Higher diversity; accuracy peaks ~95% by epoch 50. See Fig 21-30 for fused nets & samples (epochs 10/30/50).
+  - **Generator**: Embeds 5-class one-hot into noise for conditioned outputs.
+  - **Discriminator**: Dual heads—real/fake + 5-class softmax; joint loss (BCE + CE).
+  
+- **Training**: Balanced weights; monitors separate losses.
+- **Evaluation**: Improved diversity; acc. ~95% by epoch 50. Samples at epochs 10/30/50 (Fig 21-30).
 
 ## WGAN: Wasserstein GAN
-Addresses vanishing gradients/mode collapse with Earth-Mover distance.
+Addresses vanishing gradients/mode collapse with [Wasserstein distance](https://arxiv.org/abs/1701.07875).
 
-- **Architecture**: Same as DCGAN but no sigmoid; critic (discriminator) trained 5x per G step.
-  - Loss: Wasserstein (critic: E[real] - E[fake] + λGP); Generator: -E[critic(fake)].
-  - Gradient Penalty (λ=10) for 1-Lipschitz enforcement.
-
-- **Training**: Clip weights [-0.01, 0.01] initially; 50 epochs.
-- **Evaluation**: Smoother convergence; loss stabilizes faster. See Fig 38-44 for loss function & samples (epochs 1/11/26/46).
+- **Architecture**: DCGAN-like but sigmoid-free; critic trained 5x per G step.
+  - Loss: Wasserstein estimate + λ=10 gradient penalty; no weight clipping in improved variant.
+  
+- **Training**: 50 epochs; smoother than vanilla GAN.
+- **Evaluation**: Stabilizes faster; high-fidelity samples by epoch 46 (Fig 38-44).
 
 ## Enhancements: Smoothing & Noise
-Mitigate overfitting/mode collapse.
+Per assignment (Q1.3), applied to stabilize DCGAN/AC-GAN/WGAN.
 
-- **Label Smoothing**: Real labels=0.9 (vs. 1.0); reduces discriminator overconfidence (Fig 13,45).
-- **Noise Injection**: Gaussian noise to labels/inputs during training (Fig 14,31,46); improves generalization.
-- **Impact**: AC-GAN/WGAN with enhancements show 10-15% better stability (e.g., less oscillatory loss). Samples at epochs 10/30/50 (Fig 25-37,47-49) demonstrate crisper, diverse outputs.
+- **One-Sided Label Smoothing**: Real labels=0.9 (reduces overconfidence; Fig 13,45).
+- **Add Noise**: Gaussian to labels/inputs (improves generalization; Fig 14,31,46).
+- **Impact**: 10-15% better stability (e.g., less oscillatory loss); crisper samples (Fig 15-18,25-37,47-49).
 
 ## Results & Evaluation
-Trained on GPU; key metrics from plots (50 epochs):
+Trained on CPU/GPU; metrics from 50 epochs on 5-class digits:
 
-| Model   | Final Loss (D/G) | Final Accuracy | Key Insight                  | Sample Quality (Epoch 46) |
-|---------|------------------|----------------|------------------------------|---------------------------|
-| DCGAN  | 0.5 / 1.2       | 92%           | Baseline; good convergence  | Realistic but uniform    |
-| AC-GAN | 0.4 / 1.0       | 95%           | Class-conditional diversity | Labeled, varied styles   |
-| WGAN   | 0.3 / 0.8       | 96%           | Stable, no collapse         | High-fidelity, smooth    |
-| +Enhancements | -5-10% lower | +2-3%        | Reduced variance            | Sharper, less artifacts  |
+| Model          | Final Loss (D/G) | Final Accuracy | Key Insight                  | Sample Quality (Epoch 46) |
+|----------------|------------------|----------------|------------------------------|---------------------------|
+| DCGAN         | 0.5 / 1.2       | 92%           | Baseline; good convergence  | Realistic digits         |
+| AC-GAN        | 0.4 / 1.0       | 95%           | Class-conditional diversity | Labeled, varied          |
+| WGAN          | 0.3 / 0.8       | 96%           | Stable, no collapse         | High-fidelity            |
+| +Enhancements | -5-10% lower    | +2-3%         | Reduced variance            | Sharper, less artifacts  |
 
-- Visuals: Generated grids (noisy→refined); confusion matrices for AC-GAN classes.
-- Full plots: `figures/plots/` (e.g., Fig 11-12: DCGAN loss/acc; Fig 50-51: WGAN enhanced).
+- Visuals: Generated grids; confusion matrices for classes. Full plots in `figures/plots/`.
 
-## How to Run
-1. Clone repo: `git clone https://github.com/yourusername/gan-image-synthesis.git`
-2. Install deps: `pip install -r requirements.txt` (tensorflow, matplotlib, numpy)
-3. Load data: Run `notebooks/00_setup.ipynb` (downloads MNIST/CIFAR).
-4. Train DCGAN: `python src/train.py --model dcgan --epochs 50`
-5. Generate samples: `python src/evaluate.py --model acgan --epoch 46 --classes 5`
-6. Visualize: Open `notebooks/` for interactive plots.
-7. Note: Use GPU for speed; adjust latent_dim=100, img_size=64.
 
 ## Challenges & Learnings
-- **Challenges**: Mode collapse in vanilla GAN (mitigated by WGAN); high compute for conv layers; label imbalance in conditioning.
-- **Learnings**: Wasserstein loss > BCE for stability; auxiliary classifiers enable control; smoothing/noise as simple yet effective regularizers.
+- **Challenges**: Mode collapse/vanishing gradients (mitigated by WGAN); compute on custom dataset; class imbalance in conditioning.
+- **Learnings**: Wasserstein > BCE for stability; auxiliary classifiers add control; simple smoothing/noise as effective regularizers (per HW analysis reqs).
 
 ## Future Work
-- Scale to StyleGAN for higher-res (e.g., CelebA faces).
-- Add evaluation metrics (FID, Precision/Recall for distributions).
-- Conditional text-to-image (integrate CLIP).
-- Deploy as web app for interactive generation.
+- Higher-res with StyleGAN on larger datasets (e.g., CelebA).
+- FID/IS metrics for quantitative eval.
+- Text-conditioned via CLIP integration.
+- Trading bot backtesting with crypto signals (cross-project).
+
+## References
+- [Radford, A., Metz, L., & Chintala, S. (2015). *Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks*. ICLR.](https://arxiv.org/abs/1511.06434)
+- [Odena, A., Olah, C., & Shlens, J. (2017). *Conditional Image Synthesis with Auxiliary Classifier GANs*. ICML.](https://arxiv.org/abs/1610.09585)
+- [Arjovsky, M., Chintala, S., & Bottou, L. (2017). *Wasserstein Generative Adversarial Networks*. ICML.](https://arxiv.org/abs/1701.07875)
+- [HW6 Assignment](path/to/HW6.pdf) & [Report Template](path/to/REPORTS_TEMPLATE.docx) – University of Tehran, NNDL Course.
 
 ## License
 MIT License—feel free to use/fork!
