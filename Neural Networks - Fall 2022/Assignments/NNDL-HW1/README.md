@@ -7,11 +7,11 @@ This project covers foundational neural network implementations as part of Neura
 
 **Key Goal**: Build and evaluate basic NN models on synthetic/real datasets, analyzing convergence (e.g., MSE <0.1), separation accuracy, and prediction errors.
 
-- **Team Members**: Sara Rastegar (810100355), Amin Shahcheraghi (810199196)
-- **Date**: Oct 2022
+- **Team Members**: Sara Rostami, Amin Shahcheraghi
+- **Date**: Oct 2022 (1401/08/07)
 - **Technologies**: Python 3.x, NumPy (core computations), Matplotlib (visualizations)
 - **Datasets**: Synthetic 2D points (A/B/C for Adaline/Madaline), MovieLens (RBM recommender), King County Houses (MLP regression, ~21K samples)
-- **Key Results**: Adaline converges MSE ~0.05 by epoch 100; Madaline (8 neurons) achieves 100% separation; RBM reduces error <0.05; MLP RMSE ~0.2 on scaled test set.
+- **Key Results**: Adaline (A): converges in 11 epochs, final MSE ~0.04; Madaline (4/8 neurons): 57/37 epochs, 100% accuracy; RBM (20 hidden units): error <0.05 after 20 epochs; MLP (2 hidden layers): final MAE 0.0172 (scaled, RMSprop variant lower loss).
 
 Focus: Theoretical foundations, training dynamics, and analysis per [HW1 Assignment](path/to/NNDL-HW1.pdf).
 
@@ -22,42 +22,12 @@ Focus: Theoretical foundations, training dynamics, and analysis per [HW1 Assignm
 - [Restricted Boltzmann Machine](#restricted-boltzmann-machine)
 - [Multi-Layer Perceptron](#multi-layer-perceptron)
 - [Results & Evaluation](#results--evaluation)
-<!-- - [How to Run](#how-to-run) -->
 - [Challenges & Learnings](#challenges--learnings)
 - [Future Work](#future-work)
 - [References](#references)
 - [License](#license)
 
-## Project Structure
-nndl-hw1\
-├── data\
-│   ├── synthetic_2d_a.csv     # Adaline dataset A\
-│   ├── synthetic_2d_c.csv     # Adaline/Madaline dataset C\
-│   ├── movielens_ratings.csv  # RBM movie ratings\
-│   └── kc_house_data.csv      # MLP house prices (preprocessed)\
-│   └── generated_samples/     # Outputs (e.g., separation plots)\
-├── notebooks\
-│   ├── 01_mcp_neuron.ipynb    # Logic gate simulatio\
-│   ├── 02_adaline_madaline.ipynb # Linear classifiers\
-│   ├── 03_rbm_recommender.ipynb # Unsupervised learning\
-│   └── 04_mlp_regression.ipynb # Supervised MLP\
-├── src\
-│   ├── mcp_neuron.py          # Threshold logic functions\
-│   ├── adaline.py             # LMS rule implementation\
-│   ├── madaline.py            # Multi-Adaline with backprop\
-│   ├── rbm.py                 # Contrastive divergence training\
-│   ├── mlp.py                 # Feedforward with sigmoid/softmax\
-│   ├── train.py               # Unified training loops\
-│   └── evaluate.py            # MSE/loss plotting & predictions\
-├── figures                   # Plots & diagrams\
-│   ├── mcp                   # Logic truth tables (Fig 1-2)\
-│   ├── adaline               # Separation lines & MSE curves (Fig 3-8)\
-│   ├── madaline              # Neuron configs & losses (Fig 9-16)\
-│   ├── rbm                   # Error per epoch (Fig 17-18)\
-│   └── mlp                   # EDA & predictions (Fig 19-27)\
-├── requirements.txt\
-└── README.md
-
+<!-- ## Project Structure -->
 
 ## McCulloch-Pitts Neuron
 Binary threshold neuron model for logic simulation (Q1).
@@ -70,31 +40,31 @@ Binary threshold neuron model for logic simulation (Q1).
 Adaptive linear neuron (Q2) for classification.
 
 - **Adaline**:
-  - LMS rule: w_new = w_old + α*(target - output)*x; α=0.01, epochs=100.
-  - Datasets A/B (linearly separable): MSE <0.1 by epoch 50 (Fig 3-5); decision boundary visualization (Fig 4).
-  - Dataset C (non-linear): Partial separation, MSE ~0.2 plateau (Fig 6-7).
+  - LMS rule: w_new = w_old + α*(target - output)*x; α=0.001, threshold=0.3, epochs up to 50.
+  - Datasets A/B (linearly separable): Converges in 11 epochs, final MSE ~0.04 (Fig 3-5); decision boundary visualization (Fig 4), equation z=0.454x + 0.491y - 0.0037.
+  - Dataset C (non-linear): 50 epochs, MSE ~0.2 plateau (Fig 6-7); partial separation, equation z=-0.396x - 0.318y - 0.884.
 
 - **Madaline**:
-  - Multi-layer Adaline: 3/4/8 hidden neurons, backprop for weights.
-  - Training: Gradient descent on MSE; converges loss ~0 by epoch 50 (Fig 11-15).
-  - Evaluation: 100% accuracy on C with 8 neurons (Fig 16); input labeling +1/-1 (Fig 9-10).
+  - Multi-layer Adaline: 3/4/8 hidden neurons, backprop for weights (MRI algorithm).
+  - Training: Gradient descent on MSE; max 300 epochs, lr=0.1.
+  - Evaluation: 3 neu: 300 epochs, 88% acc. (Fig 11-12, Table1); 4 neu: 57 epochs, 100% acc. (Fig 13-14, Table2); 8 neu: 37 epochs, 100% acc. (Fig 15-16, Table3); input labeling +1/-1 (Fig 9-10).
 
 ## Restricted Boltzmann Machine
 Unsupervised energy-based model for recommendation (Q3).
 
 - **Implementation**: Binary visible/hidden units; contrastive divergence (CD-1) for training.
   - Energy: -b_v^T v - b_h^T h - v^T W h; Gibbs sampling for updates.
-- **Dataset**: MovieLens subset; hidden=10 units, epochs=50.
-- **Evaluation**: Reconstruction error drops <0.05 (Fig 18); per-movie error plot (Fig 17); top-N recommendations via hidden probs.
+- **Dataset**: MovieLens subset (~100K ratings, 9742 movies); hidden=20 units, epochs=20.
+- **Evaluation**: Reconstruction error drops <0.05 (Fig 18); per-movie error plot (Fig 17); top-15 recommendations via hidden probs (e.g., for user 27, Table13).
 
 ## Multi-Layer Perceptron
 Supervised feedforward NN for regression (Q4).
 
-- **Architecture**: Input (21 feats) → Hidden (10 ReLU) → Output (1 linear); sigmoid for binary if needed.
-  - Backprop: Chain rule for deltas; Adam-like updates (lr=0.01).
-- **Preprocessing**: King County houses—handle NaNs (Fig 20), correlation matrix (Fig 21-22), histograms/scatters (Fig 23-25), date split (Fig 25), 80/20 train/test (Fig 26), MinMax scaling (Fig 27).
-- **Training**: 100 epochs; MSE loss monitored.
-- **Evaluation**: Test RMSE ~20K (raw prices); feature importance via weights.
+- **Architecture**: Input (21 feats) → Hidden (15 ReLU) → Hidden (7 ReLU) → Output (1 linear).
+  - Backprop: Chain rule for deltas; SGD optimizer (lr=0.01), MAE loss.
+- **Preprocessing**: King County houses—handle NaNs (none, Fig 20), correlation matrix (Fig 21-22, sqft_living corr=0.702), histograms/scatters (Fig 23-25), date split to year/month (Fig 25), 80/20 train/test (Fig 26), MinMax scaling (Fig 27).
+- **Training**: 50 epochs; MSE loss monitored.
+- **Evaluation**: Final MAE ~0.0172 (scaled); RMSprop variant lower loss (Fig 30); Adadelta comparison (Fig 29); validation split (25%, 60 epochs, Fig 33-34); test predictions e.g. [453907, 405091, ...] vs. actual [485000, 340000, ...], differences ~31K-1M raw (Fig 35); relative error ~10-20% on samples.
 
 ## Results & Evaluation
 Key metrics across models:
@@ -102,13 +72,12 @@ Key metrics across models:
 | Model       | Dataset/Task          | Convergence (Epochs) | Final Metric       | Key Insight                  |
 |-------------|-----------------------|----------------------|--------------------|------------------------------|
 | McCulloch-Pitts | Binary Multiplier    | N/A (Simulation)    | 100% Logic Acc.   | Exact for linear logic      |
-| Adaline    | 2D Separation (A/C)  | 50-100              | MSE <0.1 / 0.2    | Good for linear; struggles non-linear |
-| Madaline   | Non-Linear (C, 8 neu)| 50                  | 100% Acc., Loss=0 | Layers enable XOR-like sep. |
-| RBM        | Movie Recommender    | 50                  | Error <0.05       | Good hidden representations|
-| MLP        | House Prices         | 100                 | RMSE ~0.2 (scaled)| Strong on correlated feats. |
+| Adaline     | 2D Separation (A/C)  | 11/50               | MSE ~0.04 / 0.2   | Good for linear; struggles non-linear |
+| Madaline    | Non-Linear (C, 4/8 neu)| 57/37             | 100% Acc.         | Layers enable full sep.     |
+| RBM         | Movie Recommender    | 20                  | Error <0.05       | Good hidden representations|
+| MLP         | House Prices         | 50                  | MAE 0.0172 (scaled)| Strong on correlated feats. |
 
 - Visuals: All figures from report (e.g., Fig 1-27) in `figures/`; no overfitting observed.
-
 
 ## Challenges & Learnings
 - **Challenges**: Non-linear separability in single Adaline (fixed via Madaline layers); NaN handling in houses data; CD-1 approximation in RBM.
@@ -132,5 +101,5 @@ MIT License—feel free to use/fork!
 
 ---
 
-*Report in Persian*: [HW1_Rostami_810100355_Shahcheraghi_810199196.pdf](path/to/HW1_Rostami_810100355_Shahcheraghi_810199196.pdf)  
+*Report in Persian*: [HW1_Rostami_810100355_Shahcheraghi_810199196.pdf](HW1_Rostami_810100355_Shahcheraghi_810199196.pdf)  
 *Questions?* Open an issue or contact [your-email@example.com].
