@@ -1,6 +1,6 @@
 # Air Pollution Forecasting & Fake News Detection with RNN/LSTM Models
-
-![Project Banner](path/to/banner-image.jpg) <!-- Add a relevant image, e.g., LSTM architecture or accuracy plot -->
+<!-- 
+![Project Banner](path/to/banner-image.jpg) Add a relevant image, e.g., LSTM architecture or accuracy plot -->
 
 ## Overview
 This project implements recurrent models for time-series forecasting and text classification as part of Neural Networks & Deep Learning Homework 4 at University of Tehran. Q1: LSTM for multi-variate air pollution prediction (Beijing PM2.5 data). Q2: Hybrid CNN-LSTM for fake news detection (LIAR dataset). Emphasizes preprocessing (imputation, scaling, embeddings), lag analysis, and hybrid architectures for sequential data.
