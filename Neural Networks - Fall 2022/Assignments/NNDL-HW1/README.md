@@ -49,14 +49,14 @@ nndl-hw1\
 │   ├── mlp.py                 # Feedforward with sigmoid/softmax\
 │   ├── train.py               # Unified training loops\
 │   └── evaluate.py            # MSE/loss plotting & predictions\
-├── figures/                   # Plots & diagrams\
-│   ├── mcp/                   # Logic truth tables (Fig 1-2)\
-│   ├── adaline/               # Separation lines & MSE curves (Fig 3-8)\
-│   ├── madaline/              # Neuron configs & losses (Fig 9-16)\
-│   ├── rbm/                   # Error per epoch (Fig 17-18)\
-│   └── mlp/                   # EDA & predictions (Fig 19-27)\
+├── figures                   # Plots & diagrams\
+│   ├── mcp                   # Logic truth tables (Fig 1-2)\
+│   ├── adaline               # Separation lines & MSE curves (Fig 3-8)\
+│   ├── madaline              # Neuron configs & losses (Fig 9-16)\
+│   ├── rbm                   # Error per epoch (Fig 17-18)\
+│   └── mlp                   # EDA & predictions (Fig 19-27)\
 ├── requirements.txt\
-└── README.md\
+└── README.md
 
 
 ## McCulloch-Pitts Neuron
