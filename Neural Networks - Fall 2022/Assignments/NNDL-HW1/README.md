@@ -8,7 +8,7 @@ This project covers foundational neural network implementations as part of Neura
 **Key Goal**: Build and evaluate basic NN models on synthetic/real datasets, analyzing convergence (e.g., MSE <0.1), separation accuracy, and prediction errors.
 
 - **Team Members**: Sara Rastegar (810100355), Amin Shahcheraghi (810199196)
-- **Duration**: Oct 2022 (Due: 1401/08/05)
+- **Date**: Oct 2022
 - **Technologies**: Python 3.x, NumPy (core computations), Matplotlib (visualizations)
 - **Datasets**: Synthetic 2D points (A/B/C for Adaline/Madaline), MovieLens (RBM recommender), King County Houses (MLP regression, ~21K samples)
 - **Key Results**: Adaline converges MSE ~0.05 by epoch 100; Madaline (8 neurons) achieves 100% separation; RBM reduces error <0.05; MLP RMSE ~0.2 on scaled test set.
