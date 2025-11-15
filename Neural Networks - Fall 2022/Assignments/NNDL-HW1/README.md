@@ -1,6 +1,6 @@
 # Foundational Neural Networks: McCulloch-Pitts, Adaline/Madaline, RBM, and MLP
 
-![Project Banner](path/to/banner-image.jpg) <!-- Add a relevant image, e.g., neural network diagram or scatter plot from Adaline -->
+![Project Banner](MLP.png)
 
 ## Overview
 This project covers foundational neural network implementations as part of Neural Networks & Deep Learning Homework 1 at University of Tehran. We implement McCulloch-Pitts neurons for logic gates, Adaline/Madaline for linear classification, Restricted Boltzmann Machine (RBM) for recommendation systems, and Multi-Layer Perceptron (MLP) for regression. All from scratch in Python, focusing on core algorithms like LMS, backpropagation, and contrastive divergence.
