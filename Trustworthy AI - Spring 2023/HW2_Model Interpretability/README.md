@@ -20,3 +20,96 @@ For this question, we intended to get acquainted with the mechanism and operatio
 4. Using the [skimage](https://scikit-image.org/docs/stable/api/skimage.html) package and the outputs obtained from lime_image, we drew boundaries on the image.
 5. Added the pros and cons areas on the image and the detected boundaries.
 6. Plotted the Heatmap diagram related to the image along with the corresponding weights. In this way, we were able to see the importance of each area.
+
+# What I did
+
+## Overview
+This homework for Trustworthy AI at University of Tehran focuses on model interpretability using SHAP (SHapley Additive exPlanations) to explain predictions from a life expectancy regression model. Implemented Deep SHAP (for neural nets) and Kernel SHAP (model-agnostic) on a dataset of country health indicators. Key: Understanding feature contributions (e.g., schooling's positive impact) and comparer approximations.
+
+**Key Goal**: Demystify black-box models via SHAP values; visualize global/local explanations (summary/force plots) to reveal biases (e.g., Country's high variance).
+
+- **Author**: Sara Rostami
+- **Date**: Spring 2023
+- **Technologies**: Python 3.x, SHAP library (Deep/Kernel explainers), Matplotlib/Seaborn (visuals), Pandas/NumPy (data handling)
+- **Dataset**: Life Expectancy (~2938 samples, 19 features: schooling, BMI, HIV/AIDS, thinness_5-9_years, Country; target: life expectancy years)
+- **Key Results**: Deep SHAP: Schooling top feature (SHAP ~0.8); Kernel SHAP: thinness_5-9_years dominant (~0.6); force plots for Armenia/Turkmenistan show HIV/AIDS (-0.2/-0.15 SHAP) reducing expectancy.
+
+Focus: Additive attribution methods, SHAP approximations of Shapley values per [HW2 Report](path/to/HW2_Rostami_810100355.pdf).
+
+## Table of Contents
+- [Project Structure](#project-structure)
+- [SHAP Fundamentals](#shap-fundamentals)
+- [Deep SHAP Implementation](#deep-shap-implementation)
+- [Kernel SHAP Implementation](#kernel-shap-implementation)
+- [Comparison & Analysis](#comparison--analysis)
+- [Results & Evaluation](#results--evaluation)<!-- - [How to Run](#how-to-run) -->
+- [Challenges & Learnings](#challenges--learnings)
+- [License](#license)
+
+
+## SHAP Fundamentals
+SHAP computes fair feature contributions via Shapley values from game theory.
+
+- **Additive Attribution**: Explanations as linear models: g(z') = φ₀ + Σ φ_i z'_i (additive over features).
+- **Kernel SHAP**: Model-agnostic approximation via weighted linear regression (universal for any black-box).
+- **Deep SHAP**: Efficient for deep nets, combines Tree SHAP with DeepLIFT gradients.
+
+## Deep SHAP Implementation
+Applied to neural net regressor (baseline: ~0.85 R² on test).
+
+- **Setup**: DeepExplainer(model, background); computed SHAP for 100 samples.
+- **Summary Plot**: Schooling highest impact (positive SHAP ~0.8, increases expectancy); HIV/AIDS negative (~-0.6); Country high variance (red/blue spread, Fig 3).
+- **Force Plots**: Armenia: HIV/AIDS -0.2 SHAP (decreases by 2 years); Turkmenistan: BMI +0.15 (increases by 1.5 years, Figs 4-5).
+
+## Kernel SHAP Implementation
+Model-agnostic for comparison.
+
+- **Setup**: KernelExplainer(model.predict, background); sampled 100 instances.
+- **Summary Plot**: thinness_5-9_years top (~0.6 SHAP, malnutrition proxy); Country significant (~0.55 variance, Fig 6).
+- **Differences**: Kernel emphasizes thinness (0.6 vs. Deep 0.4); both agree on schooling/HIV (~0.7/-0.5).
+
+## Comparison & Analysis
+- **Approximations**: Deep SHAP faster for NNs (gradient-based); Kernel universal but slower (sampling). Discrepancies: Country 0.45 (Deep) vs. 0.55 (Kernel) due to model assumptions.
+- **Insights**: Schooling/HIV universal drivers; Country captures geo-effects (bias risk—recommend de-biasing).
+
+## Results & Evaluation
+SHAP values on test samples (mean absolute impact):
+
+| Explainer   | Top Feature       | SHAP Impact | Variance (Country) | Insight                          |
+|-------------|-------------------|-------------|--------------------|----------------------------------|
+| Deep SHAP  | Schooling        | ~0.8       | 0.45              | Education boosts expectancy      |
+| Kernel SHAP| thinness_5-9_years| ~0.6       | 0.55              | Malnutrition key in children     |
+
+- Force Plots: Consistent negatives (HIV/AIDS -0.2 avg.); positives (BMI +0.15). No major contradictions, but Kernel more conservative.
+
+<!-- ## How to Run
+1. Clone repo: `git clone https://github.com/SaraRostami/University.git`
+2. Navigate: `cd University/"Trustworthy AI - Spring 2023"/HW2_Model_Interpretability`
+3. Install: `pip install -r requirements.txt` (shap, matplotlib, pandas, scikit-learn, xgboost)
+4. Train Model: `python src/model_train.py` (fits XGBoost/NN on data/life_expectancy.csv)
+5. Deep SHAP: `python src/shap_deep.py --samples 100`
+6. Kernel SHAP: `python src/shap_kernel.py --samples 100`
+7. Visualize: `python src/visualize.py --explainer deep` (generates Figs 3-6)
+8. Notebook: `jupyter notebook hw2_shap_analysis.ipynb` for interactive. -->
+
+## Challenges & Learnings
+- **Challenges**: Compute-intensive sampling (Kernel on 100 samples ~10min); dataset biases (Country dominance—suggest one-hot encoding).
+- **Learnings**: SHAP unifies explanations (local/global); Deep faster for NNs but Kernel versatile; visualize for trust (force plots intuitive).
+
+<!-- ## Future Work
+- Integrate LIME for local contrasts (+SHAP for global).
+- Apply to Persian health data (e.g., COVID outcomes).
+- Bias audit: Fairlearn for Country mitigation.
+- Scale to transformers (e.g., TabTransformer + SHAP). -->
+<!-- 
+## References
+- Lundberg, S. M., & Lee, S. I. (2017). *A Unified Approach to Interpreting Model Predictions*. NeurIPS. (SHAP)
+- Ribeiro, M. T., et al. (2016). *"Why Should I Trust You?" Explaining the Predictions of Any Classifier*. KDD. (LIME inspiration)
+- [HW2 Report](path/to/HW2_Rostami_810100355.pdf) – University of Tehran, Trustworthy AI Course. -->
+
+## License
+MIT License—feel free to use/fork!
+
+---
+
+*Report in Persian*: [HW2_Rostami_810100355.pdf](path/to/HW2_Rostami_810100355.pdf)  
