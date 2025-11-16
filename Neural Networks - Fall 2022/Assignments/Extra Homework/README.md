@@ -9,8 +9,8 @@ This extra project for Neural Networks & Deep Learning at University of Tehran c
 
 **Key Goal**: Tackle real-world challenges—imbalanced data, biometric security, character recognition—via deep nets; compare baselines for optimal performance.
 
-- **Team Members**: Sara Rastegar (810100355), Amin Shahcheraghi (810199196)
-- **Duration**: Nov 2022 (Due: 1401/09/21, Submitted: 1401/09/24)
+- **Team Members**: Sara Rostami, Amin Shahcheraghi
+- **Date**: Nov 2022
 - **Technologies**: Python 3.x, TensorFlow/Keras (models/optimizers), Scikit-learn (SMOTE), Matplotlib (visuals), Pandas (preprocessing)
 - **Datasets**: Credit card fraud (imbalanced, ~284K samples, 0.17% fraud); Face liveness (train/val images, binary live/spoof); MNIST digits (60K train, 10K test, 10 classes)
 - **Key Results**: Fraud: 91.4% fraud recall (SMOTE+noise); Liveness: ~95% val acc. (25 epochs); OCR: Custom Adam CNN 99.44% val acc. (best optimizer).
