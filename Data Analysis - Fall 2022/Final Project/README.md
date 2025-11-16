@@ -8,7 +8,7 @@ This project analyzes historical cryptocurrency data for **Bitcoin (BTC)**, **Et
 **Key Goal**: Using one day's features to forecast BTC's next-day trend, leveraging ETH/USDT as auxiliary signals and technical indicators for improved accuracy.
 
 - **Team Members**: Mehdi Mohammadi Nasab, Sara Rostami, Keyhan Raeiti
-- **Duration**: 2023 (Data: 2015–2023)
+- **Date**: 2023 (Data: 2015–2023)
 - **Technologies**: Python 3.x, Selenium (web scraping), Pandas/NumPy (data handling), Matplotlib/Seaborn (visualizations), Scikit-learn (classical ML), TensorFlow/Keras (deep learning), TA-Lib (technical indicators)
 - **Dataset Size**: ~3,000 daily entries post-processing
 - **Best Model Performance**: 92% accuracy (CNN), 89% ensemble (F0.5-score: 89%, TNR: 89%)
@@ -22,8 +22,7 @@ The project emphasizes balanced binary classification (label: 1=price increase, 
 - [EDA & Analysis](#eda--analysis)
 - [Feature Selection](#feature-selection)
 - [Models & Results](#models--results)
-- [Ensemble & Final Insights](#ensemble--final-insights)
-- [How to Run](#how-to-run)
+- [Ensemble & Final Insights](#ensemble--final-insights)<!-- - [How to Run](#how-to-run) -->
 - [Challenges & Learnings](#challenges--learnings)
 - [Future Work](#future-work)
 - [License](#license)
@@ -67,7 +66,7 @@ Daily OHLCV (Open, High, Low, Close, Volume) and Market Cap data for BTC, ETH, a
   | 2022-12-01 | 17123.45 | 17234.56 | 17012.34 | 17145.67 | 28.4B     | 329.1B    |
   | ...       | ...      | ...      | ...      | ...      | ...       | ...       |
 
-- **Output**: `raw_btc_eth_usdt.csv` (no label; added post-load for flexibility).
+<!-- - **Output**: `raw_btc_eth_usdt.csv` (no label; added post-load for flexibility). -->
 
 ETH/USDT serve as features to predict BTC trends, capturing market correlations.
 
@@ -94,7 +93,7 @@ Focused on cleaning, feature engineering, and handling imbalances.
     - `low_5`: Rolling 5-day low.
     - `wprice`: Volume-weighted price (high/low/close + volume).
 
-- **Final Shape**: ~28 features initially; balanced dataset saved as `processed_features.csv`.
+- **Final Shape**: ~28 features initially; balanced dataset saved as `final_data.csv`.
 
 ## EDA & Analysis
 Exploratory analysis revealed strong BTC-ETH correlations (ETH often lags BTC) and USDT's stable/oscillatory nature.
@@ -167,5 +166,4 @@ MIT License—feel free to use/fork!
 
 ---
 
-*Report in Persian*: [Final_Project_Report.pdf](path/to/Final_Project_report.pdf)  
-*Questions?* Open an issue or contact [your-email@example.com].
+*Report in Persian*: [Final_Project_Report.pdf](Final_Project_report.pdf)  
