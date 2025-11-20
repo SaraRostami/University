@@ -91,19 +91,27 @@ Per assignment (Q1.3), applied to stabilize DCGAN/AC-GAN/WGAN.
 ## Results & Evaluation
 Trained on CPU/GPU; metrics from 50 epochs on 5-class digits:
 
-| Model          | Final Loss (D/G) | Final Accuracy | Key Insight                  | Sample Quality (Epoch 46) |
-|----------------|------------------|----------------|------------------------------|---------------------------|
-| DCGAN         | 0.5 / 1.2       | 92%           | Baseline; good convergence  | Realistic digits         |
-| AC-GAN        | 0.4 / 1.0       | 95%           | Class-conditional diversity | Labeled, varied          |
-| WGAN          | 0.3 / 0.8       | 96%           | Stable, no collapse         | High-fidelity            |
-| +Enhancements | -5-10% lower    | +2-3%         | Reduced variance            | Sharper, less artifacts  |
 
-- Visuals: Generated grids; confusion matrices for classes. Full plots in `figures/plots/`.
+| Model Variant | Final D Loss | Final G Loss | Final Accuracy (D Overall) | Key Insight | Sample Quality (Final Epoch) |
+|---------------|--------------|--------------|-----------------------------|-------------|------------------------------|
+| **DCGAN (Baseline)** | ~0.8 | ~1.0 | ~60% | Volatile losses; D dominates early, converges partially | Blurry to semi-sharp clothing sketches; artifacts visible |
+| **DCGAN (+Stabilization)** | ~0.6 | ~0.8 | ~55% | Smoother curves with label smoothing/noise; reduced oscillations | Fewer artifacts; more stable shapes |
+| **ACGAN (Baseline)** | ~0.7 (real/fake) + ~1.2 (class) | ~1.3 | ~65% (real/fake), ~70% (class) | Conditional diversity; mode collapse in early epochs | Class-specific but noisy; limited variety |
+| **ACGAN (+Stabilization)** | ~0.5 (real/fake) + ~1.0 (class) | ~1.1 | ~60% (real/fake), ~75% (class) | Better convergence; less variance in class predictions | Improved diversity; sharper labeled outputs |
+| **WGAN (Baseline)** | ~0.0 (critic) | ~0.5 | ~55% | Stable gradients; low oscillations on small data | Balanced realism; minimal blur/distortions |
+| **WGAN (+Stabilization)** | ~0.0 (critic) | ~0.4 | ~50-55% | Already stable; minor improvements from smoothing/noise | High-fidelity sketches; diverse, artifact-free |
 
+**Notes**: 
+- Experiments on 1005 grayscale 28x28 clothing images (10 classes). Trained 50 epochs, batch=32.
+- Optimal: D acc ~50%, stable losses. WGAN closest to equilibrium.
+- Stabilization (label smoothing 0.9/0.1 or -0.9/-1.1 for WGAN; 0.1% label flip noise) reduces variance across models.
+- Visuals: Progressive from noise (Epoch 1) to recognizable items (Epoch 46-50); embedded plots show trends. WGAN generates best quality.
 
 ## Challenges & Learnings
 - **Challenges**: Mode collapse/vanishing gradients (mitigated by WGAN); compute on custom dataset; class imbalance in conditioning.
-- **Learnings**: Wasserstein > BCE for stability; auxiliary classifiers add control; simple smoothing/noise as effective regularizers (per HW analysis reqs).
+- **Accuracies**: Overall D (real/fake); drops toward 50% indicates convergence.
+- **Challenges**: Small dataset leads to partial convergence (~50-85% toward equilibrium). Early models show high D dominance; WGAN reduces vanishing gradients.
+- **Visuals**: Progress from noise blobs to semi-realistic sketches (embedded PNGs in notebooks).
 
 ## Future Work
 - Higher-res with StyleGAN on larger datasets (e.g., CelebA).
