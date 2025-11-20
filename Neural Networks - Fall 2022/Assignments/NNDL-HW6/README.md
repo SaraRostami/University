@@ -122,5 +122,4 @@ MIT License—feel free to use/fork!
 
 ---
 
-*Report in Persian*: [NNDL_HW6_Report.pdf](path/to/NNDL_HW6_Report.pdf)  
-*Questions?* Open an issue or contact [your-email@example.com].
+*Report in Persian*: [NNDL_HW6_Report.pdf](NNDL_HW6_Report.pdf)  
