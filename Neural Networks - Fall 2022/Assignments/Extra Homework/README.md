@@ -58,10 +58,10 @@ Key metrics (test set; updated to match report tables/figures):
 
 | Task/Model          | Dataset       | Key Metric     | Value          | Insight                          |
 |---------------------|---------------|----------------|----------------|----------------------------------|
-| Fraud (Full Pipeline) | Credit Fraud | Recall (Fraud) | 91.4% (128/140) | SMOTE+noise boosts minority class |
-| Liveness (CNN)     | Faces        | Val Acc.      | ~95%           | Low loss plateau (~0.2)          |
-| OCR LeNet-5        | MNIST        | Acc.          | 99%            | Avg pooling aids generalization  |
-| OCR Custom (Adam)  | MNIST        | Val Acc.      | 99.44%         | Best optimizer (fastest)         |
+| Fraud (Full Pipeline) | Credit Fraud | Recall (Fraud) | ~87% (128/140) | SMOTE+noise boosts minority class |
+| Liveness (LeNet-5)     | Video of Faces        | Val Acc.      | ~95%           | Low loss plateau (~0.2)          |
+| OCR Custom DCNN (Momentum)     | HODA        | Acc.          | 99.48%            | Avg pooling aids generalization  |
+| OCR Custom (Adam)  | HODA        | Val Acc.      | 99.44%         | Best optimizer (fastest)         |
 
 <!-- - Visuals: Conf. matrices highlight errors; PR curves for fraud (Figs 8/11); all in `figures/`. -->
 
