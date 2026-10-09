@@ -50,11 +50,11 @@ Coursework, projects, teaching and workshop material from my MSc in Artificial I
 | Course | Term | Instructor(s) |
 |---|---|---|
 | Machine Learning | Fall 2021 | [Dr. M. Abolghasemi Dehaqani](https://ece.ut.ac.ir/en/~dehaqani), [Dr. B. Nadjar Araabi](https://ece.ut.ac.ir/en/~araabi) |
-| Statistical Inference | Fall 2021 | [Dr. B. Bahrak](https://ece.ut.ac.ir/en/~bahrak) |
-| Introduction to Cognitive Neuroscience | Spring 2022 | [Dr. M. Abolghasemi Dehaqani](https://ece.ut.ac.ir/en/~dehaqani) |
-| Data Analysis | Fall 2022 | [Dr. M. A. Sadeghi](https://ece.ut.ac.ir/en/~asadeghi), [Dr. M. Abolghasemi Dehaqani](https://ece.ut.ac.ir/en/~dehaqani) |
-| Neural Networks & Deep Learning | Fall 2022 | [Dr. A. Kalhor](https://ece.ut.ac.ir/en/~akalhor) |
-| Trustworthy AI | Spring 2023 | [Dr. M. A. Sadeghi](https://ece.ut.ac.ir/en/~asadeghi), [Dr. M. Tavassolipour](https://profile.ut.ac.ir/en/~96755111/grants) |
+| Statistical Inference | Fall 2021 | [Dr. B. Bahrak](https://scholar.google.com/citations?user=FTcata0AAAAJ&hl=en&oi=ao) |
+| Introduction to Cognitive Neuroscience | Spring 2022 | [Dr. M. Abolghasemi Dehaqani](https://scholar.google.com/citations?user=HuMGDxIAAAAJ&hl=en) |
+| Data Analysis | Fall 2022 | [Dr. M. A. Sadeghi](https://scholar.google.com/citations?hl=en&user=Viogmi8AAAAJ&view_op=list_works&sortby=pubdate), [Dr. M. Abolghasemi Dehaqani](https://scholar.google.com/citations?user=HuMGDxIAAAAJ&hl=en) |
+| Neural Networks & Deep Learning | Fall 2022 | [Dr. A. Kalhor](https://scholar.google.com/citations?user=m7xdmMgAAAAJ&hl=en) |
+| Trustworthy AI | Spring 2023 | [Dr. M. A. Sadeghi](https://scholar.google.com/citations?hl=en&user=Viogmi8AAAAJ&view_op=list_works&sortby=pubdate), [Dr. M. Tavassolipour](https://scholar.google.com/citations?user=oVAT1lYAAAAJ&hl=en) |
 | Bio-Inspired Computing | Spring 2023 | [Dr. M. Asadpour](https://ece.ut.ac.ir/en/~asadpour) |
 
 Each course folder follows the same layout: one folder per assignment, containing the problem set, the data, the solution code (notebooks or scripts) and the written report. Most reports are in Persian; every featured README is in English. Most projects were done in teams of two to four, and each featured README lists the team.
