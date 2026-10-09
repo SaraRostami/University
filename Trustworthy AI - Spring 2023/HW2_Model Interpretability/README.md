@@ -1,115 +1,113 @@
-# Model Interpretability
-This homework included three implementation questions. All of these questions targeted the Interpretability of a Model (i.e. Explaing a Deep Learning Model).
+# Explainable AI: SHAP, D-RISE and LIME
 
-## Question One: SHAP
-The objective of this question is explaining a simple regression MLP model:
-1. We trained a regression MLP model on the *Life Expectancy Data.csv* dataset, to predict the *'Life_expectancy'*.
-2. Used 10% of data for test and the rest for training and evaluation
-3. Used the Kernel SHAP and Deep SHAP methods of the [shap package](https://shap-lrjball.readthedocs.io/en/latest/api.html), and obtained the SHAP values with the summary_plot function for all test samples and all model features to determine the effect of each on the output.
-4. Randomly chose a sample from two countries in one continent and plotted the force_plot for them.
-
-## Question Two: D-RISE
-In this question, we intended to examine Object Detectors using Saliency Maps. For this purpose, we have chosen the [D-RISE paper](https://arxiv.org/pdf/2006.03204.pdf).
-- Through this link, we accessed the notebook related to the trial version of this paper. Then chose three categories from the list of labels, and searched for images related to it on Google Images or any similar platform and chose an image from each category. Then gave the selected images as an input to the model and reported the saliency maps.
-
-## Question Three: LIME
-For this question, we intended to get acquainted with the mechanism and operation of LIME (Local Interpretable Model-agnostic Explanation). As its name suggests, this method is model-agnostic and considers the model as a black-box entity. For knowing more about this method, you can check out this [paper](https://arxiv.org/pdf/1602.04938.pdf?source=post_page---------------------------). So the method can be used to interpret any machine learning model. We used the [lime](https://lime-ml.readthedocs.io/en/latest/index.html) package in Pyhton. What we did is as follows:
-1. Employed the the pre-trained MobileNet-V2 model in the framework of our choice (mine was Tensorflow). The model was trained on the ImageNet dataset.
-2. Chose a category from the dataset's classes, and get three images of that category from the internet, and measured the performance of the model on it. Displayed the top 5 categories with the highest probabilities.
-3. After making sure that the loaded model is working correctly, we used the lime package. Defineed the image manipulation module of this library for the model.
-4. Using the [skimage](https://scikit-image.org/docs/stable/api/skimage.html) package and the outputs obtained from lime_image, we drew boundaries on the image.
-5. Added the pros and cons areas on the image and the detected boundaries.
-6. Plotted the Heatmap diagram related to the image along with the corresponding weights. In this way, we were able to see the importance of each area.
-
-# What I did
+<p>
+  <img src="Images/Image4.png" width="32%" alt="D-RISE saliency for 'bear'">
+  <img src="Images/Image52.png" width="32%" alt="D-RISE saliency for 'mouse'">
+  <img src="Images/Image81.png" width="32%" alt="D-RISE saliency for 'cake'">
+</p>
 
 ## Overview
-This homework for Trustworthy AI at University of Tehran focuses on model interpretability using SHAP (SHapley Additive exPlanations) to explain predictions from a life expectancy regression model. Implemented Deep SHAP (for neural nets) and Kernel SHAP (model-agnostic) on a dataset of country health indicators. Key: Understanding feature contributions (e.g., schooling's positive impact) and comparer approximations.
+Homework 2 of Trustworthy AI (University of Tehran) applies three explanation methods, each to a different kind of model:
 
-**Key Goal**: Demystify black-box models via SHAP values; visualize global/local explanations (summary/force plots) to reveal biases (e.g., Country's high variance).
+| Method | Type | Model explained |
+|---|---|---|
+| **SHAP** (Deep SHAP and Kernel SHAP) | Additive feature attribution | MLP regressor predicting national life expectancy from WHO health indicators |
+| **D-RISE** | Black-box saliency maps for object detection | Faster R-CNN (ResNet-50-FPN) trained on COCO |
+| **LIME** | Local surrogate over superpixels | MobileNetV2 image classifier trained on ImageNet |
 
 - **Author**: Sara Rostami
 - **Date**: Spring 2023
-- **Technologies**: Python 3.x, SHAP library (Deep/Kernel explainers), Matplotlib/Seaborn (visuals), Pandas/NumPy (data handling)
-- **Dataset**: Life Expectancy (~2938 samples, 19 features: schooling, BMI, HIV/AIDS, thinness_5-9_years, Country; target: life expectancy years)
-- **Key Results**: Deep SHAP: Schooling top feature (SHAP ~0.8); Kernel SHAP: thinness_5-9_years dominant (~0.6); force plots for Armenia/Turkmenistan show HIV/AIDS (-0.2/-0.15 SHAP) reducing expectancy.
-
-Focus: Additive attribution methods, SHAP approximations of Shapley values per [HW2 Report](path/to/HW2_Rostami_810100355.pdf).
+- **Technologies**: Python, TensorFlow/Keras, `shap`, `lime`, scikit-image, PyTorch + MMDetection (D-RISE), pandas, scikit-learn
+- **Key Results**:
+  - The life-expectancy MLP reaches **test R² = 0.956** (RMSE ≈ 2.0 years).
+  - **Deep SHAP and Kernel SHAP agree** on the three most important features: **Schooling**, then HIV/AIDS, then income composition of resources.
+  - D-RISE saliency concentrates on the detected object, even for a small computer mouse next to a keyboard. LIME shows MobileNetV2's "snail" prediction (94.6%) relies on the shell and body, not the background.
 
 ## Table of Contents
 - [Project Structure](#project-structure)
-- [SHAP Fundamentals](#shap-fundamentals)
-- [Deep SHAP Implementation](#deep-shap-implementation)
-- [Kernel SHAP Implementation](#kernel-shap-implementation)
-- [Comparison & Analysis](#comparison--analysis)
-- [Results & Evaluation](#results--evaluation)<!-- - [How to Run](#how-to-run) -->
-- [Challenges & Learnings](#challenges--learnings)
-- [License](#license)
+- [Q1: SHAP on a Life-Expectancy Regressor](#q1-shap-on-a-life-expectancy-regressor)
+- [Q3: D-RISE for Object Detection](#q3-d-rise-for-object-detection)
+- [Q4: LIME for Image Classification](#q4-lime-for-image-classification)
+- [References](#references)
 
+## Project Structure
+```
+HW2_Model Interpretability/
+├── HW2_TAI_Q1.ipynb            # MLP regressor + Deep SHAP / Kernel SHAP
+├── Life Expectancy Data.csv    # WHO life-expectancy dataset (2,938 rows)
+├── HW2_TAI_Q3.ipynb            # D-RISE runner (Colab, MMDetection)
+├── TAI_Q3_img{1,2,3}.py        # D-RISE script for each input image
+├── images_Q3/                  # D-RISE inputs (bear, desk, cake)
+├── HW2_TAI_Q4.ipynb            # LIME on MobileNetV2
+├── images_Q4/                  # LIME inputs (snail, pizza & wine, truck & traffic light, teddy bear)
+├── Images/                     # Saved outputs (D-RISE detections and saliency maps, SHAP and LIME figures)
+├── TAI_HW2.pdf                 # Assignment description (Persian)
+└── HW2_Rostami_810100355.pdf   # Full report (Persian), including the Q2 paper-reading answers
+```
+Q2 asked for a written review of *Distilling a Neural Network Into a Soft Decision Tree*. It has no code; the answers are in the report.
 
-## SHAP Fundamentals
-SHAP computes fair feature contributions via Shapley values from game theory.
+## Q1: SHAP on a Life-Expectancy Regressor
+**Model**
+- **Data**: the WHO life-expectancy dataset, with health, economic and immunisation indicators per country and year.
+  - Rows with missing values were dropped, leaving 1,649.
+  - `Country` and `Status` were one-hot encoded, giving 153 features (`Year` excluded).
+  - Split 90/10 into 1,484 training and 165 test rows, with features standardised.
+- **Regressor**: an MLP (64 → 32 → 16 → 1, ReLU) trained with Adam and MSE for 100 epochs. **Train R² = 0.969, test R² = 0.956** (test MSE 4.06, i.e. RMSE ≈ 2.0 years).
 
-- **Additive Attribution**: Explanations as linear models: g(z') = φ₀ + Σ φ_i z'_i (additive over features).
-- **Kernel SHAP**: Model-agnostic approximation via weighted linear regression (universal for any black-box).
-- **Deep SHAP**: Efficient for deep nets, combines Tree SHAP with DeepLIFT gradients.
+**Explanations**
+- **Deep SHAP** (`shap.DeepExplainer`, training set as background) and **Kernel SHAP** (`shap.KernelExplainer`, 160 samples per explanation) were computed for all 165 test rows.
+- Global importance was compared with summary bar plots. Single predictions were explained with waterfall plots and with force plots for two Asian countries in the test set (Armenia and Turkmenistan).
 
-## Deep SHAP Implementation
-Applied to neural net regressor (baseline: ~0.85 R² on test).
+| Rank | Deep SHAP (mean \|SHAP\|, years) | Kernel SHAP (mean \|SHAP\|, years) |
+|---|---|---|
+| 1 | **Schooling** (≈ 1.8) | **Schooling** (≈ 1.4) |
+| 2 | HIV/AIDS (≈ 1.4) | HIV/AIDS (≈ 0.8) |
+| 3 | Income composition of resources (≈ 1.0) | Income composition of resources (≈ 0.55) |
 
-- **Setup**: DeepExplainer(model, background); computed SHAP for 100 samples.
-- **Summary Plot**: Schooling highest impact (positive SHAP ~0.8, increases expectancy); HIV/AIDS negative (~-0.6); Country high variance (red/blue spread, Fig 3).
-- **Force Plots**: Armenia: HIV/AIDS -0.2 SHAP (decreases by 2 years); Turkmenistan: BMI +0.15 (increases by 1.5 years, Figs 4-5).
+<img src="Images/deep_shap_summary.png" width="420" alt="Deep SHAP global feature importance">
 
-## Kernel SHAP Implementation
-Model-agnostic for comparison.
+- Both explainers rank the same three features at the top. Education and HIV prevalence dominate the model's predictions, ahead of spending or immunisation rates.
+- Many country dummy variables get small but non-zero attributions. This shows the model also memorises country-level offsets, a known risk when the country identity is given as a feature.
+- **Note**: the notebook's Kernel SHAP bar plot passes `feature_names=data1.columns`. That list still includes `Year` and `Life_expectancy`, so every label is shifted by two columns: the bar marked "thinness_5-9_years" is actually *Schooling*. The table above uses the correct names. With correct labels, the two explainers agree.
 
-- **Setup**: KernelExplainer(model.predict, background); sampled 100 instances.
-- **Summary Plot**: thinness_5-9_years top (~0.6 SHAP, malnutrition proxy); Country significant (~0.55 variance, Fig 6).
-- **Differences**: Kernel emphasizes thinness (0.6 vs. Deep 0.4); both agree on schooling/HIV (~0.7/-0.5).
+## Q3: D-RISE for Object Detection
+- **Detector**: Faster R-CNN R50-FPN (MMDetection, COCO, box mAP 0.384), explained with the [D-RISE](https://arxiv.org/abs/2006.03204) implementation from [hysts/pytorch_D-RISE](https://github.com/hysts/pytorch_D-RISE).
+- **How it works**: D-RISE treats the detector as a black box. It applies 500–1,000 random masks (16×16 grid, keep probability 0.5) to the image and weights each mask by how well the masked image's detections still match the target box and class. The weighted masks combine into a saliency map for each detection.
+- **Images**:
 
-## Comparison & Analysis
-- **Approximations**: Deep SHAP faster for NNs (gradient-based); Kernel universal but slower (sampling). Discrepancies: Country 0.45 (Deep) vs. 0.55 (Kernel) due to model assumptions.
-- **Insights**: Schooling/HIV universal drivers; Country captures geo-effects (bias risk—recommend de-biasing).
+  | Image | Detections and confidence |
+  |---|---|
+  | Bear | bear 0.996 |
+  | Desk | keyboard 0.996, mouse 0.987, TV 0.875 |
+  | Cake stand | three donuts 0.95–0.98, cake 0.79, dining table 0.84 |
 
-## Results & Evaluation
-SHAP values on test samples (mean absolute impact):
+- **Findings**:
+  - For the bear, keyboard, mouse and each individual donut, the saliency concentrates on the object itself: the bear's head, and the small mouse even though it sits next to the much larger keyboard.
+  - For the cake, the saliency spreads broadly across the cake instead of focusing on one part.
+  - The cake image also produces a low-confidence (0.55) "donut" box over the top of the cake. Its saliency sits on the sprinkled frosting, which suggests the detector associates that texture with donuts.
 
-| Explainer   | Top Feature       | SHAP Impact | Variance (Country) | Insight                          |
-|-------------|-------------------|-------------|--------------------|----------------------------------|
-| Deep SHAP  | Schooling        | ~0.8       | 0.45              | Education boosts expectancy      |
-| Kernel SHAP| thinness_5-9_years| ~0.6       | 0.55              | Malnutrition key in children     |
+## Q4: LIME for Image Classification
+- **Classifier**: pre-trained MobileNetV2 (ImageNet), explained with `lime_image`:
+  - 800–1,000 perturbed samples per image
+  - the 5 most positive superpixels highlighted, plus the 10 strongest positive and negative ("pros and cons") superpixels
+  - a heatmap of each superpixel's weight
+- **Images and top-1 predictions**:
 
-- Force Plots: Consistent negatives (HIV/AIDS -0.2 avg.); positives (BMI +0.15). No major contradictions, but Kernel more conservative.
+  | Image | Top prediction | Runner-up |
+  |---|---|---|
+  | Snail | snail 94.6% | — |
+  | Teddy bear | teddy 83.3% | — |
+  | Truck with traffic lights | trailer truck 72.1% | fire engine 10.3% |
+  | Pizza with red wine | pizza 35.8% | red wine 14.7% |
 
-<!-- ## How to Run
-1. Clone repo: `git clone https://github.com/SaraRostami/University.git`
-2. Navigate: `cd University/"Trustworthy AI - Spring 2023"/HW2_Model_Interpretability`
-3. Install: `pip install -r requirements.txt` (shap, matplotlib, pandas, scikit-learn, xgboost)
-4. Train Model: `python src/model_train.py` (fits XGBoost/NN on data/life_expectancy.csv)
-5. Deep SHAP: `python src/shap_deep.py --samples 100`
-6. Kernel SHAP: `python src/shap_kernel.py --samples 100`
-7. Visualize: `python src/visualize.py --explainer deep` (generates Figs 3-6)
-8. Notebook: `jupyter notebook hw2_shap_analysis.ipynb` for interactive. -->
+<img src="Images/lime_snail.jpg" width="640" alt="LIME explanation for the 'snail' prediction">
 
-## Challenges & Learnings
-- **Challenges**: Compute-intensive sampling (Kernel on 100 samples ~10min); dataset biases (Country dominance—suggest one-hot encoding).
-- **Learnings**: SHAP unifies explanations (local/global); Deep faster for NNs but Kernel versatile; visualize for trust (force plots intuitive).
+- For the snail, the supporting superpixels cover the shell and body, so the prediction relies on the object rather than the lettuce background.
+- In the multi-object scenes the explanations are less clean. The "pizza" explanation also includes table and background superpixels, and the "trailer truck" explanation includes large areas of sky, road and trees. So the classifier relies on scene context as well as the object, which is what LIME is good at revealing.
 
-<!-- ## Future Work
-- Integrate LIME for local contrasts (+SHAP for global).
-- Apply to Persian health data (e.g., COVID outcomes).
-- Bias audit: Fairlearn for Country mitigation.
-- Scale to transformers (e.g., TabTransformer + SHAP). -->
-<!-- 
 ## References
-- Lundberg, S. M., & Lee, S. I. (2017). *A Unified Approach to Interpreting Model Predictions*. NeurIPS. (SHAP)
-- Ribeiro, M. T., et al. (2016). *"Why Should I Trust You?" Explaining the Predictions of Any Classifier*. KDD. (LIME inspiration)
-- [HW2 Report](path/to/HW2_Rostami_810100355.pdf) – University of Tehran, Trustworthy AI Course. -->
-
-## License
-MIT License—feel free to use/fork!
-
----
-
-*Report in Persian*: [HW2_Rostami_810100355.pdf](path/to/HW2_Rostami_810100355.pdf)  
+- Lundberg & Lee (2017). [*A Unified Approach to Interpreting Model Predictions*](https://arxiv.org/abs/1705.07874). NeurIPS.
+- Petsiuk et al. (2021). [*Black-box Explanation of Object Detectors via Saliency Maps*](https://arxiv.org/abs/2006.03204). CVPR.
+- Ribeiro, Singh & Guestrin (2016). [*"Why Should I Trust You?" Explaining the Predictions of Any Classifier*](https://arxiv.org/abs/1602.04938). KDD.
+- Frosst & Hinton (2017). [*Distilling a Neural Network Into a Soft Decision Tree*](https://arxiv.org/abs/1711.09784).
+- [Assignment description (TAI_HW2.pdf, Persian)](TAI_HW2.pdf) · [Full report (HW2_Rostami_810100355.pdf, Persian)](HW2_Rostami_810100355.pdf)

@@ -1,90 +1,108 @@
-# Attention Mechanisms & Transformers: BERT Encoder and BEiT for NLP/Vision Tasks
-
-<!-- ![Project Banner](path/to/banner-image.jpg) Add a relevant image, e.g., attention heatmap or BEiT segmentation -->
+# Attention & Transformers: a BERT Encoder from Scratch, and BEiT for Vision
 
 ## Overview
-This project delves into attention and transformer architectures as part of Neural Networks & Deep Learning Homework 5 at University of Tehran. Q1: Implement/explain BERT encoder (attention, multi-head, embeddings). Q2: Vision transformers via BEiT (pretraining, segmentation, classification baseline). Focus on self-attention math, positional/segment embeddings, and ViT/BEiT adaptations for images.
+Homework 5 of Neural Networks & Deep Learning (University of Tehran) has two parts:
 
-**Key Goal**: Build transformer components from scratch; apply to NLP (sentence analysis) and vision (segmentation/classification); evaluate via weights/visuals and metrics (acc./loss).
+1. **Q1, BERT from scratch.** We implemented the building blocks of a BERT encoder by hand in TensorFlow/Keras:
+   - multi-head scaled dot-product attention
+   - the GELU activation
+   - the feed-forward sub-layer
+   - Add & Norm with residual connections
+   - token/position embeddings and the `[CLS]` pooler
 
-- **Team Members**: Sara Rostami, Amin Shahcheraghi 
-- **Date**: Jan 2023 (Due: 1401/10/13)
-- **Technologies**: Python 3.x, PyTorch (transformer layers), Matplotlib (visuals/heatmaps)
-- **Datasets**: Custom sentence for BERT; ADE20K-like for BEiT segmentation; CIFAR-10 for MLP baseline (~60K images, 10 classes)
-- **Key Results**: BERT: Attention weights highlight relations (e.g., movie-cinema 0.25 max); BEiT segmentation: Fine-tuned IoU ~0.65 (vs. pre-trained 0.55, Fig 4); MLP CIFAR-10: 55% test acc., loss plateau ~0.7 after 50 epochs (Figs 6-9).
+   We then trained the resulting model as a sentiment classifier on about 336K Rotten Tomatoes critic reviews.
+2. **Q2, Transformers for vision.**
+   - Ran semantic segmentation on ADE20K (`scene_parse_150`) with a pre-trained **BEiT** model.
+   - Fine-tuned a **SegFormer-B0** segmentation model on a small ADE20K subset.
+   - Built an **MLP baseline** for CIFAR-10 classification.
 
-Focus: Attention scalability, vision adaptations per [HW5 Assignment](path/to/NNDL-HW5.pdf).
+- **Team Members**: Sara Rostami, Amin Shahcheraghi
+- **Date**: Jan 2023
+- **Technologies**:
+  - Q1: TensorFlow/Keras, TensorFlow Datasets (subword tokenizer), bertviz
+  - Q2: PyTorch, Hugging Face `transformers` / `datasets` / `evaluate`, Keras, scikit-learn
+- **Key Results**:
+  - **BERT encoder (Q1)**: **73.8% test accuracy** on binary sentiment after 2 epochs (84,051 test reviews, 17.7M parameters).
+  - **SegFormer-B0 fine-tuning (Q2)**: mean IoU went from 0.034 to 0.082 and pixel accuracy from 36% to 43% after 100 steps on 40 training images.
+  - **MLP baseline (Q2)**: **53.8% test accuracy** on CIFAR-10.
 
 ## Table of Contents
 - [Project Structure](#project-structure)
-- [Q1: Attention & BERT Encoder](#q1-attention--bert-encoder)
-- [Q2: Vision Transformers & BEiT](#q2-vision-transformers--beit)
-- [Results & Evaluation](#results--evaluation)<!-- - [How to Run](#how-to-run) -->
-- [Challenges & Learnings](#challenges--learnings)
-- [Future Work](#future-work)
+- [Q1: BERT Encoder from Scratch](#q1-bert-encoder-from-scratch)
+- [Q2: Transformers for Vision](#q2-transformers-for-vision)
+- [Results](#results)
+- [Known Issues](#known-issues)
 - [References](#references)
-- [License](#license)
 
-<!-- ## Project Structure -->
+## Project Structure
+```
+NNDL-HW5/
+├── Q1/
+│   ├── Q1_transformer_completed.ipynb   # BERT encoder implementation, training, attention visualisation
+│   ├── transformer.ipynb                # Original assignment template
+│   └── reviews.zip                      # Rotten Tomatoes critic reviews (train/test CSVs)
+├── Q2/
+│   ├── 2_2_part1.ipynb                  # BEiT (ADE20K-finetuned) segmentation inference on scene_parse_150
+│   ├── 2_2_part2.ipynb                  # SegFormer-B0 fine-tuning on an ADE20K subset + BEiT inference
+│   ├── 2_3_MLP.ipynb                    # MLP baseline on CIFAR-10
+│   └── 2_3_BeiT.ipynb                   # Exploratory transformer-backbone classifier (not completed)
+├── NNDL-HW5.pdf                         # Assignment description (Persian)
+└── NNDL_HW5_Report.pdf                  # Full report (Persian)
+```
 
-## Q1: Attention & BERT Encoder
-Covers self-attention basics and BERT implementation.
+## Q1: BERT Encoder from Scratch
+Every layer is a custom `keras.layers.Layer` written for this assignment:
 
-- **Attention Explanation**: Dynamic weighting via Q/K/V linear transforms; scaled dot-product prevents vanishing (divide √d_k); softmax for probs, weighted V sum (Eq 1). Multi-head: h parallel (d_model/h dim each), concat/project for diverse relations (e.g., syntax/semantics).
-- **BERT Impl.**: Token (vocab 30K), positional (sin/cos), segment embeddings (0/1 for sentences A/B). Encoder: 12 layers (self-attn + FFN, GELU act., layer norm, residual). Input: [CLS] sentence [SEP]; output: Hidden states/attn weights.
-- **Example Run**: "I liked the movie I saw in the cinema" → Embeddings (batch=1, seq=9, dim=768); attn weights show peaks (movie-I: 0.22, cinema-saw: 0.18, Figs 1-3).
+| Component | Implementation |
+|---|---|
+| `MultiHeadAttention` | Q/K/V projections are split into heads; scaled dot-product attention; the heads are concatenated and passed through an output projection |
+| `GELU` | tanh approximation from Hendrycks & Gimpel |
+| `FFN` | Dense (GELU) → Dense → Dropout, with truncated-normal initialisation |
+| `AddNorm` | Residual connection, then LayerNorm and Dropout |
+| `Encoder` | Attention → Add & Norm → FFN → Add & Norm |
+| `BertEmbedding` | Token embedding with padding mask, plus a learned position-embedding table, LayerNorm and Dropout |
+| `Pooler` | Dense layer on the `[CLS]` hidden state |
 
-## Q2: Vision Transformers & BEiT
-Adapts transformers to images via BEiT and baseline.
+- **Data**: Rotten Tomatoes critic reviews with binary labels, split into 252,150 training and 84,051 test reviews. We trained a subword tokenizer with a vocabulary of about 20K, and capped inputs at 32 tokens.
+- **Model**: hidden size 768, 12 attention heads, one encoder layer, 17.7M parameters.
+- **Training**: Adam (lr = 5e-5), binary cross-entropy, batch size 128, 2 epochs.
+- **Attention visualisation**: the sentence *"I liked the movie I saw in the cinema"* is plotted with bertviz's `head_view` (see [Known Issues](#known-issues)).
 
-- **BEiT Overview**: BERT-like pretraining on images (patch masking 40%, DINO teacher for pseudo-labels); ViT backbone (patches 16x16, pos embed absolute). Semantic segmentation: Decoder head (pixel-wise logits); fine-tuned on small ADE20K subset.
-- **Segmentation**: Pre-trained BEiT: Coarse masks; fine-tuned (5 epochs, lr=1e-5, batch=2): Improved boundaries (Fig 4, e.g., person/object IoU +0.1).
-- **Classification Baseline**: MLP on CIFAR-10 (Input 32x32x3 → FC(512 ReLU) → FC(10 softmax)); Adam lr=0.001, CE loss, 50 epochs, batch=128. Train acc. ~60%, test 55% (Figs 6-7); confusion: High errors airplane/bird (Fig 8); predictions sample (Fig 9).
-- **Questions**: 1. Conv ≈ local hard attention (fixed kernel vs. learned weights). 2. Local attn: Nearby tokens (efficient); global: All (compute-heavy). 3-4: True/False on BEiT (teacher-student, absolute pos); ViT scalability.
+## Q2: Transformers for Vision
+**Semantic segmentation (ADE20K / `scene_parse_150`)**
+- Ran inference with `microsoft/beit-base-finetuned-ade-640-640` (BEiT-Base) and colour-coded the predicted masks over the 150 ADE20K classes.
+- Fine-tuned `nvidia/mit-b0` (SegFormer-B0, 3.8M parameters) with the Hugging Face `Trainer` on a 50-image subset (40 train / 10 eval):
+  - colour-jitter augmentation
+  - lr = 6e-5, batch size 2, 5 epochs (100 steps)
+  - evaluated with `evaluate`'s `mean_iou`
 
-## Results & Evaluation
-Key outputs/metrics:
+**Image classification (CIFAR-10)**
+- MLP baseline: 3072 → 1024 → 512 → 512 → 10, with ReLU and Dropout 0.4. Trained with SGD, batch size 128, for 100 epochs.
+- `2_3_BeiT.ipynb` is an unfinished attempt to put an MLP head on a transformer backbone, as the assignment asked. It does not produce a trained classifier.
 
-**Q1: BERT Attention**:
-- Weights matrix: Peaks 0.22-0.18 (e.g., movie attends to I/cinema); full in Figs 1-3.
-- Hyperparams: d_model=768, heads=12, layers=12.
+## Results
+| Task | Model | Data | Metric | Result |
+|---|---|---|---|---|
+| Sentiment classification | BERT encoder (from scratch) | Rotten Tomatoes, 84K test reviews | Accuracy | 70.1% after epoch 1, **73.8%** after epoch 2 |
+| Semantic segmentation | SegFormer-B0 (fine-tuned) | ADE20K, 10 eval images | Mean IoU / pixel acc. | 0.034 → **0.082** / 36% → **43%** |
+| Image classification | MLP baseline | CIFAR-10, 10K test images | Accuracy | **53.8%** (train 59.5%) |
 
-**Q2: BEiT Segmentation & MLP Class.**:
-| Model/Task     | Dataset    | Metric      | Value     | Insight                     |
-|----------------|------------|-------------|-----------|-----------------------------|
-| BEiT (fine-tuned) | ADE20K sample | IoU (avg.) | ~0.65    | Better edges vs. pre-train (Fig 4) |
-| MLP Baseline  | CIFAR-10  | Test Acc.  | 55%      | Plateau ~0.55 (Fig 6); loss ~0.7 (Fig 7) |
-| MLP           | CIFAR-10  | Top Errors | Airplane/Bird 25% | Texture confusion (Fig 8) |
+- The BERT encoder was still improving after 2 epochs. Each epoch took about 25 minutes, which limited how long we could train.
+- Segmentation scores are low because the model saw only 40 training images for 150 classes. The goal was to exercise the fine-tuning pipeline, not to compete on ADE20K.
+- In the MLP baseline, cat (26%) and dog (39%) have the lowest recall. Without convolutions or attention, an MLP has no way to exploit spatial structure.
 
-- Insights: Attention captures relations dynamically; BEiT adapts BERT to vision via patches; MLP simple but limited on complex images.
-
-<!-- ## How to Run
-1. Clone the main repository: `git clone https://github.com/SaraRostami/University.git`
-2. Navigate to the project directory: `cd University/"Neural Networks - Fall 2022"/Assignments/NNDL-HW5`
-3. Install dependencies: `pip install -r requirements.txt` (torch, transformers, torchvision, matplotlib)
-4. Q1 BERT: `python src/bert_encoder.py --sentence "I liked the movie I saw in the cinema"`
-5. Q2 BEiT Seg: `python src/beit_vision.py --task segment --epochs 5 --data ade_sample`
-6. Q2 MLP Class: `python src/mlp_baseline.py --dataset cifar10 --epochs 50`
-7. Visualize: Open `notebooks/` for attn heatmaps/plots. GPU for BEiT. -->
-
-## Challenges & Learnings
-- **Challenges**: High memory for BERT layers (used batch=1); small seg dataset overfitting (aug. helped); MLP underfits CIFAR (needs conv backbone).
-- **Learings**: Multi-head diversifies attn (syntax + semantics); BEiT bridges NLP/vision (masking on patches); absolute pos essential for ViT order.
-
-## Future Work
-- Scale BEiT to full ADE20K (IoU>0.75 with longer train).
-- Add self-attn to MLP for hybrid ViT-MLP (+10% acc.).
-- Fine-tune BERT for NER on Persian text.
-- Explore sparse attn for efficiency.
+## Known Issues
+We found these issues in a later review of Q1. They are documented here rather than changed, because changing them would invalidate the reported results:
+- `BertEmbedding.call` adds the token embedding to itself, so the learned position embeddings are never used.
+- `create_BERT` builds a single encoder layer (`num_layers` is ignored), and the FFN's intermediate size is 12 instead of BERT's 4 × 768.
+- Attention scores are scaled by √768 (the hidden size) rather than √64 (the per-head dimension).
+- The padding mask adds +1 to real tokens instead of −∞ to padding, so padded positions still get some attention.
+- `get_att_weights` returns the attention layer's parameters rather than its stored attention probabilities (`att_weights`), so the bertviz plot is not a true attention map.
 
 ## References
-- [Devlin, J., et al. (2018). *BERT: Pre-training of Deep Bidirectional Transformers*. NAACL.](https://arxiv.org/abs/1810.04805)
-- [Bao, H., et al. (2021). *BEiT: BERT Pre-Training of Image Transformers*. arXiv.](https://arxiv.org/abs/2106.08254)
-- [Vaswani, A., et al. (2017). *Attention is All You Need*. NeurIPS.] (Transformers)
-
-## License
-MIT License—feel free to use/fork!
-
----
-
-*Report in Persian*: [NNDL_HW5_Report.pdf](NNDL_HW5_Report.pdf)  
+- Vaswani et al. (2017). [*Attention Is All You Need*](https://arxiv.org/abs/1706.03762).
+- Devlin et al. (2019). [*BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding*](https://arxiv.org/abs/1810.04805).
+- Hendrycks & Gimpel (2016). [*Gaussian Error Linear Units (GELUs)*](https://arxiv.org/abs/1606.08415).
+- Bao et al. (2022). [*BEiT: BERT Pre-Training of Image Transformers*](https://arxiv.org/abs/2106.08254).
+- Xie et al. (2021). [*SegFormer: Simple and Efficient Design for Semantic Segmentation with Transformers*](https://arxiv.org/abs/2105.15203).
+- [Assignment description (NNDL-HW5.pdf, Persian)](NNDL-HW5.pdf) · [Full report (NNDL_HW5_Report.pdf, Persian)](NNDL_HW5_Report.pdf)

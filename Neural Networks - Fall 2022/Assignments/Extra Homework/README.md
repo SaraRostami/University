@@ -1,99 +1,113 @@
-# Extra Homework: Fraud Detection, Liveness Detection, and OCR with Deep Networks
+# Fraud Detection, Face Liveness Detection and Persian OCR with Deep Networks
 
-![Project Banner1](Lenet5.png)
-![Project Banner2](alexnet.webp)
-
+![LeNet-5](Lenet5.png)
 
 ## Overview
-This extra project for Neural Networks & Deep Learning at University of Tehran covers three independent tasks: (1) Fraud detection with imbalance handling (SMOTE + autoencoder), (2) Face liveness detection via CNN, (3) OCR model comparisons (LeNet-5, AlexNet, custom CNN with optimizers). Implemented from scratch, emphasizing preprocessing, architectures, and metrics like recall for imbalance, accuracy/loss for classification.
+An extra assignment for Neural Networks & Deep Learning (University of Tehran) with three independent tasks:
 
-**Key Goal**: Tackle real-world challenges—imbalanced data, biometric security, character recognition—via deep nets; compare baselines for optimal performance.
+1. **Credit-card fraud detection**: replicates the pipeline from *Credit Card Fraud Detection Using Autoencoder Neural Network*, which combines SMOTE oversampling, a denoising autoencoder and a fully-connected classifier on a dataset where 0.17% of transactions are fraud.
+2. **Face liveness detection**: a small CNN liveness classifier, plus a real-time blink-detection demo that uses an eye-state CNN.
+3. **Persian handwritten digit recognition (OCR)**: a deep CNN on the HODA dataset, trained with three optimisers for comparison.
 
 - **Team Members**: Sara Rostami, Amin Shahcheraghi
-- **Date**: Nov 2022
-- **Technologies**: Python 3.x, TensorFlow/Keras (models/optimizers), Scikit-learn (SMOTE), Matplotlib (visuals), Pandas (preprocessing)
-- **Datasets**: Credit card fraud (imbalanced, ~284K samples, 0.17% fraud); Face liveness (train/val images, binary live/spoof); MNIST digits (60K train, 10K test, 10 classes)
-- **Key Results**: Fraud: 91.4% fraud recall (SMOTE+noise); Liveness: ~95% val acc. (25 epochs); OCR: Custom Adam CNN 99.44% val acc. (best optimizer).
-
-Focus: Imbalance mitigation, CNN design, optimizer ablation per [Extra HW Assignment](path/to/Extra%20HW.pdf).
+- **Date**: Dec 2022
+- **Technologies**: Python, TensorFlow/Keras, scikit-learn, imbalanced-learn (SMOTE), OpenCV (Haar cascades), Matplotlib (trained on Google Colab)
+- **Key Results**:
+  - **Fraud detection**: catches **87% of fraudulent transactions** (128 of 147 in the test set) at 11% precision. The same classifier trained without SMOTE and denoising catches 2%.
+  - **Liveness detection**: **95.5% validation accuracy** with a 20.7K-parameter CNN.
+  - **OCR**: **99.48% test accuracy** on 20,000 HODA digits (SGD with momentum) and 99.44% with Adam.
 
 ## Table of Contents
 - [Project Structure](#project-structure)
-- [Response 1: Fraud Detection](#response-1-fraud-detection)
-- [Response 2: Liveness Detection](#response-2-liveness-detection)
-- [Response 3: Optical Character Recognition](#response-3-optical-character-recognition)
-- [Results & Evaluation](#results--evaluation)<!-- - [How to Run](#how-to-run) -->
-- [Challenges & Learnings](#challenges--learnings)
-- [Future Work](#future-work)
+- [Q1: Credit-Card Fraud Detection](#q1-credit-card-fraud-detection)
+- [Q2: Face Liveness Detection](#q2-face-liveness-detection)
+- [Q3: Persian Handwritten Digit Recognition](#q3-persian-handwritten-digit-recognition)
+- [Results](#results)
+- [Limitations & Future Work](#limitations--future-work)
 - [References](#references)
-- [License](#license)
 
-<!-- ## Project Structure -->
+## Project Structure
+```
+Extra Homework/
+├── Q1/
+│   ├── Q1.ipynb                                      # SMOTE + denoising autoencoder + classifier
+│   └── Credit Card Fraud Detection Using Autoencoders.pdf   # Reference paper
+├── Q2/
+│   ├── code part 1.ipynb                             # CNN liveness classifier
+│   ├── liveness detection code part 2.zip            # Blink-detection demo (adapted from Guarouba/face_rec)
+│   ├── Dataset_2.zip                                 # Open/closed eye images for the eye-state CNN
+│   ├── Haar_cascade.zip                              # OpenCV face/eye cascades
+│   └── face_liveliness_detection.MOV                 # Demo recording
+├── Q3/
+│   ├── ex3.ipynb                                     # CNN on HODA with SGD+momentum / Adam / Adadelta
+│   └── HODA.zip                                      # HODA Persian digit dataset (.cdb)
+├── Extra HW.pdf                                      # Assignment description (Persian)
+└── NNDL_Extra_Report.pdf                             # Full report (Persian)
+```
 
-## Response 1: Fraud Detection
-Addresses imbalanced credit fraud data using SMOTE + denoising autoencoder + FC classifier.
+## Q1: Credit-Card Fraud Detection
+Data: the [Kaggle credit-card fraud dataset](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud), with 284,807 transactions, 0.17% of them fraud.
 
-- **Imbalance Handling**: SMOTE oversampling (synthetic minority samples via k-NN); Gaussian noise addition to train/test (prevents overfitting). 3D visualization pre/post-SMOTE (Fig 2).
-- **Autoencoder**: 6-layer denoised (MSE loss, 60 epochs); reconstructs noisy inputs for feature learning (Fig 4).
-- **Classifier**: 5-layer FC (cross-entropy, softmax); trained on denoised features. Baseline without SMOTE/noise: ~70% recall; full pipeline: 91.4% recall (128/140 fraud detections), ~88% precision (Fig 7-8, conf. Fig6).
-- **Analysis**: Recall prioritized for fraud (minimize FN); PR curve shows robustness (Fig 8/11).
+1. **Preprocessing**: drop `Time` and min-max scale `Amount`. Split 70/30 into 199,364 training transactions (345 fraud) and 85,443 test transactions (147 fraud).
+2. **SMOTE**: oversample the training set to 398,038 transactions with balanced classes.
+3. **Denoising autoencoder**: add Gaussian noise (σ = 0.1) to the inputs. The autoencoder learns to map noisy inputs back to clean ones (29 → 15 → 10 → 15 → 22 → 29, LeakyReLU, MSE loss, Adam, 60 epochs).
+4. **Classifier**: a fully-connected network (29 → 22 → 15 → 10 → 5 → 2, LeakyReLU) trained on the denoised features with Adam (lr = 1e-3) for 35 epochs.
+5. **Baseline**: the same classifier trained directly on the raw, imbalanced data.
 
-## Response 2: Liveness Detection
-CNN for binary classification (live vs. spoof faces).
+| Model | Fraud recall | Fraud precision | Fraud F1 | Normal recall |
+|---|---|---|---|---|
+| Baseline (raw, imbalanced data) | 0.02 | 0.00 | 0.00 | 0.76 |
+| **SMOTE + denoising AE + classifier** | **0.87** | 0.11 | 0.20 | 0.99 |
 
-- **Architecture**: Input → 3 Conv (32/64/128 filters, 3x3 kernel) + MaxPool(2x2) → Flatten → 2 Dense(128 ReLU) + Dropout(0.5) → Output sigmoid (Fig 13).
-- **Training**: Adam optimizer, binary CE loss; 80/20 train/val split; 25 epochs to ~95% val acc., loss ~0.2 (Figs 14-15).
-- **Evaluation**: High precision on live (~0.96); suitable for biometric security (e.g., anti-spoofing via blink detection pipeline outlined).
+The full pipeline finds most of the frauds. It also raises about 1,000 false alarms, roughly 1% of legitimate transactions. That trade-off can work for a first screening stage, but a deployed system would need a second filter or a tuned decision threshold.
 
-## Response 3: Optical Character Recognition
-Compares LeNet-5, AlexNet, custom CNN on digits; ablates optimizers.
+## Q2: Face Liveness Detection
+**Part 1: CNN liveness classifier** (`code part 1.ipynb`)
+- 600 face images at 224×224 (480 train / 120 validation), with two classes.
+- Architecture:
+  - BatchNorm, then three Conv(3×3) + MaxPool + BatchNorm blocks (8 → 16 → 128 filters) with Dropout 0.1
+  - GlobalAveragePooling, then a sigmoid output
+  - 20.7K parameters in total
+- Training: Adam (lr = 1e-4), binary cross-entropy, 25 epochs. Reaches **95.5% validation accuracy** (89.6% on the training set).
 
-- **LeNet-5**: 2 Conv + AvgPool + 2 FC; 99% acc. (simple, efficient for small images, Fig 16).
-- **AlexNet**: 5 Conv + MaxPool + 3 FC; 98% acc., GPU speedup noted (Fig 17).
-- **Custom CNN**: 3 Conv + MaxPool + 2 FC + Dropout; optimizers: Momentum (lr=0.01, momentum=0.9: 99.48% val acc., Fig 22-24), Adam (lr=0.001: 99.44% val acc., Fig 28-30), AdaDelta (lr=1.0: 73.01% val acc., Fig 32-34). Conf. matrices (Fig 26/31/36) show 4/9 errors.
-- **Comparison**: LeNet best for digits (lightweight); Adam fastest convergence (Fig 23/29/33).
+**Part 2: blink-based liveness demo** (`liveness detection code part 2.zip`)
+- Haar cascades locate the face and eyes in each frame.
+- A small LeNet-style CNN classifies each eye as open or closed (24×24 grayscale). We trained it on `Dataset_2`: 3,783 training and 1,069 validation eye crops.
+- A blink (closed for a few frames, then open again) counts as evidence of a live face. This defends against photo attacks.
+- The demo code is adapted from [Guarouba/face_rec](https://github.com/Guarouba/face_rec). We retrained the eye-state model for this assignment.
 
-## Results & Evaluation
-Key metrics (test set; updated to match report tables/figures):
+## Q3: Persian Handwritten Digit Recognition
+- **Data**: HODA Persian handwritten digits, with 60,000 training and 20,000 test images resized to 40×40.
+- **Model**: a deep CNN with 4.66M parameters:
+  - Conv blocks of 64 → 128 → 128 → 256 → 256 filters, each with BatchNorm, plus MaxPool and Dropout between blocks
+  - Fully-connected head with softmax over 10 digits
+- **Optimiser comparison**: 20 epochs, batch size 32, same architecture each time.
 
-| Task/Model          | Dataset       | Key Metric     | Value          | Insight                          |
-|---------------------|---------------|----------------|----------------|----------------------------------|
-| Fraud (Full Pipeline) | Credit Fraud | Recall (Fraud) | ~87% (128/140) | SMOTE+noise boosts minority class |
-| Liveness (LeNet-5)     | Video of Faces        | Val Acc.      | ~95%           | Low loss plateau (~0.2)          |
-| OCR Custom DCNN (Momentum)     | HODA        | Acc.          | 99.48%            | Avg pooling aids generalization  |
-| OCR Custom (Adam)  | HODA        | Val Acc.      | 99.44%         | Best optimizer (fastest)         |
+| Optimiser | Test accuracy (epoch 20) | Notes |
+|---|---|---|
+| SGD + momentum (lr = 1e-3, β = 0.9) | **99.48%** | Jumps from ~90% to 99% at epoch 13 |
+| Adam (lr = 1e-3) | 99.44% | Converges fastest (99% by epoch 4) |
+| Adadelta (Keras default lr = 1e-3) | 73.01% | Still improving steadily; the default learning rate is too small for 20 epochs |
 
-<!-- - Visuals: Conf. matrices highlight errors; PR curves for fraud (Figs 8/11); all in `figures/`. -->
+## Results
+| Task | Data | Metric | Result |
+|---|---|---|---|
+| Fraud detection | Credit-card fraud, 85K test transactions | Fraud recall / precision | **87%** / 11% (baseline: 2% recall) |
+| Liveness classification | 120 validation face images | Accuracy | **95.5%** |
+| Persian digit OCR | HODA, 20K test images | Accuracy | **99.48%** (SGD + momentum), 99.44% (Adam) |
 
-<!-- ## How to Run
-1. Clone the main repository: `git clone https://github.com/SaraRostami/University.git`
-2. Navigate to the project directory: `cd University/"Neural Networks - Fall 2022"/Assignments/Extra\ Homework`
-3. Install dependencies: `pip install -r requirements.txt` (tensorflow, keras, scikit-learn, imbalanced-learn, matplotlib)
-4. Fraud: `python src/fraud_pipeline.py --smote --noise --epochs 60`
-5. Liveness: `python src/liveness_cnn.py --epochs 25`
-6. OCR Custom (Adam): `python src/ocr_custom_cnn.py --optimizer adam --epochs 20`
-7. Evaluate: `python src/evaluate.py --task fraud --data credit_test`
-8. Visualize: Open `notebooks/` for plots/conf. matrices. CPU/GPU fine. -->
-
-## Challenges & Learnings
-- **Challenges**: Fraud imbalance (SMOTE synthetic artifacts mitigated by noise); liveness small data (aug. needed); OCR digit confusions (4/9 via data aug.).
-- **Learnings**: Denoising autoencoders robustify classifiers; Adam > Momentum/AdaDelta for convergence; LeNet efficient for structured data like digits.
-
-## Future Work
-- Integrate GAN for fraud synthetic data (beyond SMOTE).
-- Add blink detection to liveness (multi-frame CNN).
-- Fine-tune OCR on Persian digits; ensemble LeNet+AlexNet (+1% acc.).
-- Deploy fraud model for real-time transaction monitoring.
+## Limitations & Future Work
+- **Fraud detection**:
+  - Tune the decision threshold on a separate validation set to trade recall against precision.
+  - Report PR-AUC, which handles extreme class imbalance better than accuracy or ROC-AUC.
+  - The test set was also used for validation and checkpointing during training. A separate validation split would give an unbiased estimate.
+- **Liveness detection**: the dataset of 600 images is small. Evaluating on held-out subjects and adding replay or mask attacks would test generalisation.
+- **OCR**: the HODA test set doubled as the validation set, but no model selection was done on it. Every reported number comes from the final epoch.
 
 ## References
-- Chawla, N. V., et al. (2002). *SMOTE: Synthetic Minority Over-sampling Technique*. JAIR. (Imbalance handling)
-- LeCun, Y., et al. (1998). *Gradient-based Learning Applied to Document Recognition*. Proc. IEEE. (LeNet-5)
-- Krizhevsky, A., et al. (2012). *ImageNet Classification with Deep Convolutional Neural Networks*. NeurIPS. (AlexNet)
-- [Extra HW Assignment](Extra%20HW.pdf) – University of Tehran, NNDL Course.
-
-## License
-MIT License—feel free to use/fork!
-
----
-
-*Report in Persian*: [NNDL_Extra_Report.pdf](NNDL_Extra_Report.pdf)  
+- Chawla et al. (2002). [*SMOTE: Synthetic Minority Over-sampling Technique*](https://arxiv.org/abs/1106.1813). JAIR.
+- *Credit Card Fraud Detection Using Autoencoder Neural Network* (reference paper in [`Q1/`](Q1)).
+- LeCun et al. (1998). *Gradient-Based Learning Applied to Document Recognition*. Proc. IEEE (LeNet-5).
+- Krizhevsky, Sutskever & Hinton (2012). *ImageNet Classification with Deep Convolutional Neural Networks*. NeurIPS (AlexNet).
+- [Guarouba/face_rec](https://github.com/Guarouba/face_rec): eye-blink liveness detection.
+- [Assignment description (Extra HW.pdf, Persian)](Extra%20HW.pdf) · [Full report (NNDL_Extra_Report.pdf, Persian)](NNDL_Extra_Report.pdf)

@@ -14,7 +14,7 @@ This project investigates CNN performance under varying input resolutions on CIF
 - **Dataset**: CIFAR-10 (~60K 32x32 RGB images, 10 balanced classes: airplane, automobile, etc.)
 - **Key Results**: TOTV 32x32-train/32x32-test: 79% acc.; outperformed paper on low-res tests (e.g., 76% on 24x24 vs. 64%); TVTV converges faster on low-res but lower overall (e.g., 54% on 8x8); TOTV > TVTV for robustness.
 
-Focus: Resolution-induced info loss, architecture tweaks for robustness per [HW2 Assignment](path/to/NNDL-HW2.pdf).
+Focus: Resolution-induced info loss, architecture tweaks for robustness per [HW2 Assignment](NNDL-HW2.pdf).
 
 ## Table of Contents
 - [Project Structure](#project-structure)
