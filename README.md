@@ -50,7 +50,7 @@ Coursework, projects, teaching and workshop material from my MSc in Artificial I
 | Course | Term | Instructor(s) |
 |---|---|---|
 | Machine Learning | Fall 2021 | [Dr. M. Abolghasemi Dehaqani](https://ece.ut.ac.ir/en/~dehaqani), [Dr. B. Nadjar Araabi](https://ece.ut.ac.ir/en/~araabi) |
-| Statistical Inference | Fall 2021 | [Dr. B. Bahrak](https://scholar.google.com/citations?user=FTcata0AAAAJ&hl=en&oi=ao) |
+| Statistical Inference | Fall 2021 | [Dr. B. Bahrak](https://scholar.google.com/citations?user=1IdcoLMAAAAJ&hl=en) |
 | Introduction to Cognitive Neuroscience | Spring 2022 | [Dr. M. Abolghasemi Dehaqani](https://scholar.google.com/citations?user=HuMGDxIAAAAJ&hl=en) |
 | Data Analysis | Fall 2022 | [Dr. M. A. Sadeghi](https://scholar.google.com/citations?hl=en&user=Viogmi8AAAAJ&view_op=list_works&sortby=pubdate), [Dr. M. Abolghasemi Dehaqani](https://scholar.google.com/citations?user=HuMGDxIAAAAJ&hl=en) |
 | Neural Networks & Deep Learning | Fall 2022 | [Dr. A. Kalhor](https://scholar.google.com/citations?user=m7xdmMgAAAAJ&hl=en) |
