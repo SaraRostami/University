@@ -13,10 +13,9 @@ This project covers foundational neural network implementations as part of Neura
 - **Datasets**: Synthetic 2D points (A/B/C for Adaline/Madaline), MovieLens (RBM recommender), King County Houses (MLP regression, ~21K samples)
 - **Key Results**: Adaline (A): converges in 11 epochs, final MSE ~0.04; Madaline (4/8 neurons): 57/37 epochs, 100% accuracy; RBM (20 hidden units): error <0.05 after 20 epochs; MLP (2 hidden layers): final MAE 0.0172 (scaled, RMSprop variant lower loss).
 
-Focus: Theoretical foundations, training dynamics, and analysis per [HW1 Assignment](path/to/NNDL-HW1.pdf).
+Focus: Theoretical foundations, training dynamics, and analysis per [HW1 Assignment](NNDL-HW1.pdf).
 
 ## Table of Contents
-- [Project Structure](#project-structure)
 - [McCulloch-Pitts Neuron](#mcculloch-pitts-neuron)
 - [Adaline & Madaline](#adaline--madaline)
 - [Restricted Boltzmann Machine](#restricted-boltzmann-machine)
@@ -24,7 +23,6 @@ Focus: Theoretical foundations, training dynamics, and analysis per [HW1 Assignm
 - [Results & Evaluation](#results--evaluation)
 - [Challenges & Learnings](#challenges--learnings)
 - [Future Work](#future-work)
-- [References](#references)
 - [License](#license)
 
 <!-- ## Project Structure -->
