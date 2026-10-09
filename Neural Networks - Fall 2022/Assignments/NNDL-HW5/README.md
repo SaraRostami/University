@@ -8,7 +8,7 @@ Homework 5 of Neural Networks & Deep Learning (University of Tehran) has two par
    - the GELU activation
    - the feed-forward sub-layer
    - Add & Norm with residual connections
-   - token/position embeddings and the `[CLS]` pooler
+   - token embeddings and the `[CLS]` pooler
 
    We then trained the resulting model as a sentiment classifier on about 336K Rotten Tomatoes critic reviews.
 2. **Q2, Transformers for vision.**
@@ -19,7 +19,7 @@ Homework 5 of Neural Networks & Deep Learning (University of Tehran) has two par
 - **Team Members**: Sara Rostami, Amin Shahcheraghi
 - **Date**: Jan 2023
 - **Technologies**:
-  - Q1: TensorFlow/Keras, TensorFlow Datasets (subword tokenizer), bertviz
+  - Q1: TensorFlow/Keras, TensorFlow Datasets (subword tokenizer)
   - Q2: PyTorch, Hugging Face `transformers` / `datasets` / `evaluate`, Keras, scikit-learn
 - **Key Results**:
   - **BERT encoder (Q1)**: **73.8% test accuracy** on binary sentiment after 2 epochs (84,051 test reviews, 17.7M parameters).
@@ -31,14 +31,13 @@ Homework 5 of Neural Networks & Deep Learning (University of Tehran) has two par
 - [Q1: BERT Encoder from Scratch](#q1-bert-encoder-from-scratch)
 - [Q2: Transformers for Vision](#q2-transformers-for-vision)
 - [Results](#results)
-- [Known Issues](#known-issues)
 - [References](#references)
 
 ## Project Structure
 ```
 NNDL-HW5/
 ├── Q1/
-│   ├── Q1_transformer_completed.ipynb   # BERT encoder implementation, training, attention visualisation
+│   ├── Q1_transformer_completed.ipynb   # BERT encoder implementation and training
 │   ├── transformer.ipynb                # Original assignment template
 │   └── reviews.zip                      # Rotten Tomatoes critic reviews (train/test CSVs)
 ├── Q2/
@@ -60,13 +59,12 @@ Every layer is a custom `keras.layers.Layer` written for this assignment:
 | `FFN` | Dense (GELU) → Dense → Dropout, with truncated-normal initialisation |
 | `AddNorm` | Residual connection, then LayerNorm and Dropout |
 | `Encoder` | Attention → Add & Norm → FFN → Add & Norm |
-| `BertEmbedding` | Token embedding with padding mask, plus a learned position-embedding table, LayerNorm and Dropout |
+| `BertEmbedding` | Token embedding with padding mask, LayerNorm and Dropout |
 | `Pooler` | Dense layer on the `[CLS]` hidden state |
 
 - **Data**: Rotten Tomatoes critic reviews with binary labels, split into 252,150 training and 84,051 test reviews. We trained a subword tokenizer with a vocabulary of about 20K, and capped inputs at 32 tokens.
 - **Model**: hidden size 768, 12 attention heads, one encoder layer, 17.7M parameters.
 - **Training**: Adam (lr = 5e-5), binary cross-entropy, batch size 128, 2 epochs.
-- **Attention visualisation**: the sentence *"I liked the movie I saw in the cinema"* is plotted with bertviz's `head_view` (see [Known Issues](#known-issues)).
 
 ## Q2: Transformers for Vision
 **Semantic segmentation (ADE20K / `scene_parse_150`)**
@@ -90,14 +88,6 @@ Every layer is a custom `keras.layers.Layer` written for this assignment:
 - The BERT encoder was still improving after 2 epochs. Each epoch took about 25 minutes, which limited how long we could train.
 - Segmentation scores are low because the model saw only 40 training images for 150 classes. The goal was to exercise the fine-tuning pipeline, not to compete on ADE20K.
 - In the MLP baseline, cat (26%) and dog (39%) have the lowest recall. Without convolutions or attention, an MLP has no way to exploit spatial structure.
-
-## Known Issues
-We found these issues in a later review of Q1. They are documented here rather than changed, because changing them would invalidate the reported results:
-- `BertEmbedding.call` adds the token embedding to itself, so the learned position embeddings are never used.
-- `create_BERT` builds a single encoder layer (`num_layers` is ignored), and the FFN's intermediate size is 12 instead of BERT's 4 × 768.
-- Attention scores are scaled by √768 (the hidden size) rather than √64 (the per-head dimension).
-- The padding mask adds +1 to real tokens instead of −∞ to padding, so padded positions still get some attention.
-- `get_att_weights` returns the attention layer's parameters rather than its stored attention probabilities (`att_weights`), so the bertviz plot is not a true attention map.
 
 ## References
 - Vaswani et al. (2017). [*Attention Is All You Need*](https://arxiv.org/abs/1706.03762).
